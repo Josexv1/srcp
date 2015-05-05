@@ -1,19 +1,17 @@
 <?php 
-    //Requerimos la configuracion, de caso contrario no abrira la APP
     require("config.php"); 
 if (isset($_COOKIE["id_usuario"]) && isset($_COOKIE["marca_aleatoria_usuario"])){
    //Tengo cookies memorizadas
    //además voy a comprobar que esas variables no estén vacías
    if ($_COOKIE["id_usuario"]!="" || $_COOKIE["marca_aleatoria_usuario"]!=""){
-// comenzamos a pedir el password y correo de la DB
+// 
 $query = "  SELECT 
-                ID, 
-                password, 
-				        salt,
-				        correo
+				ID, 
+                password,
+				salt,
+				correo,
             FROM usuarios 
-            WHERE 
-                ID = :id 
+            WHERE ID = :id 
         "; 
         $query_params = array( 
             ':id' => $_COOKIE['id_usuario'] 
@@ -25,21 +23,23 @@ $query = "  SELECT
         } 
         catch(PDOException $ex){ 
 		echo "<div class='panel-body'>
-                            <div class='alert alert-warning alert-dismissable'>
-                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
-								</div>" .$ex->getMessage();
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+				</div>
+			 </div>" .$ex->getMessage();
 		} 
         $row = $stmt->fetch();
 		header('Location: panel.php');
-   }//FIN IF COOKIE VACIO
-} // FIN ISSET COOKIE
+   } // Terminamos de probar la cookie
+} // Fin del isset de la cookie.
     if(!empty($_POST)){ 
         $query = " 
             SELECT 
                 ID, 
-                password, 
-				        salt,
-				        correo
+                password,
+                salt,
+                correo
             FROM usuarios 
             WHERE 
                 correo = :correo 
@@ -53,13 +53,13 @@ $query = "  SELECT
             $result = $stmt->execute($query_params); 
         } 
         catch(PDOException $ex){ 
-		//die("Failed to run query: " . $ex->getMessage()); 
 		echo "<div class='panel-body'>
-                            <div class='alert alert-warning alert-dismissable'>
-                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
-								</div>" .$ex->getMessage();
+                    <div class='alert alert-warning alert-dismissable'>
+                        <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                        Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+					</div>
+			  </div>" .$ex->getMessage();
 		} 
-
         
 		$login_ok = false; 
         $row = $stmt->fetch(); 
@@ -73,11 +73,10 @@ $query = "  SELECT
                 $login_ok = true;
             } 
         } 
+
         if($login_ok){ 
 		//INICIO DE LA COOKIE.
-		
-		if ($_POST["recordar"]=="1"){
-      //es que pidió memorizar el usuario
+	  //es que pidió memorizar el usuario
       //1) creo una marca aleatoria en el registro de este usuario
       //alimentamos el generador de aleatorios
       mt_srand (time());
@@ -95,53 +94,56 @@ $query = "  SELECT
             $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
         }
-        catch(PDOException $ex){
+        catch(PDOException $ex){ /*die("Fallamos al realizar la accion: " . $ex->getMessage());*/ 
 		// Si tenemos problemas para ejecutar la consulta imprimimos el error
 			echo "<div class='panel-body'>
-                     <div class='alert alert-warning alert-dismissable'>
-                          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
-								</div></div>" .$ex->getMessage();}
-								
-  // Aqui verificamos que el campo recordar este marcado si es 1, lo recordamos por 1 año, si no por 1 hora.
-                if ($_POST["recordar"]=="1"){   
+                    <div class='alert alert-warning alert-dismissable'>
+                          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                          Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+					</div>
+				  </div>" .$ex->getMessage();}
+						
+	  // Aqui verificamos que el campo recordar este marcado si es 1, lo recordamos por 1 año, si no por 1 hora.
+	  if ($_POST["recordar"]=="1"){		
       //3) ahora meto una cookie en la computadora del usuario con el identificador del usuario y la cookie aleatoria
       setcookie("id_usuario", $id_usuario, time()+(60*60*24*365));
       setcookie("marca_aleatoria_usuario", $numero_aleatorio, time()+(60*60*24*365));
-                }else{
-                  // si recordar es 0 recordamos solo por 1 hora :))
-    setcookie("id_usuario", $id_usuario, time()+(60*60));
-    setcookie("marca_aleatoria_usuario", $numero_aleatorio, time()+(60*60));
-                  }
-    // FIN DE LA COOKIE.
-    header("Location: index.php"); 
+								}else{
+	  setcookie("id_usuario", $id_usuario, time()+(60*60));
+      setcookie("marca_aleatoria_usuario", $numero_aleatorio, time()+(60*60));
+									}
+		// FIN DE LA COOKIE.
+		header("Location: index.php"); 
         } 
         else{ 
            //print("Fallo el inicio de sesion."); 
-      header("Location: login.php?accion=pass_error"); 
+			header("Location: index.php?accion=pass_error"); 
         } 
     } 
+	
 	if(isset($_GET['accion'])){
 
     //chequeamos la accion.
     switch ($_GET['accion']) {
         case 'registrado':
-            echo "<div class='modal fade' id='Alerta' tabindex='-1' role='dialog' aria-labeledby='AlertaLabel' aria-hidden='false'>
-			 <div class='modal-dialog'>
-                 <div class='modal-content'>
-						  <div class='modal-header'>
-					<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
-							<h3>¡Felicidades!</h3>
-						  </div>
-						  <div class='modal-body'>
-							<p>Te has registrado con exito!</p>
-							<p> Ahora puedes acceder al sistema, por medio del panel que aparecera al cerrar esta ventana.</p>
-						  </div>
-						  <div class='modal-footer'>
-<button type='button' class='btn btn-info' data-dismiss='modal'>¡Entiendo!</button>
-						   </div>
-                                    </div>
-                                </div>
-                            </div>";
+            echo "
+        <div class='modal fade' id='Alerta' tabindex='-1' role='dialog' aria-labeledby='AlertaLabel' aria-hidden='false'>
+			<div class='modal-dialog'>
+                <div class='modal-content'>
+					<div class='modal-header'>
+						<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+						<h3>¡Felicidades!</h3>
+					</div>
+					<div class='modal-body'>
+						<p>Te has registrado con exito!</p>
+						<p> Ahora puedes acceder al sistema, por medio del panel que aparecera al cerrar esta ventana.</p>
+					</div>
+					<div class='modal-footer'>
+					<button type='button' class='btn btn-info' data-dismiss='modal'>¡Entiendo!</button>
+					</div>
+                </div>
+            </div>
+        </div>";
             break;
         case 'pass_error':
 							echo "<div class='modal fade' id='Alerta' tabindex='-1' role='dialog' aria-labeledby='AlertaLabel' aria-hidden='false'>
@@ -180,7 +182,7 @@ $query = "  SELECT
                                 </div>
                             </div>";
 								break;
-        case 'salir':
+		case 'salir':
           echo "<div class='modal fade' id='Alerta' tabindex='-1' role='dialog' aria-labeledby='AlertaLabel' aria-hidden='false'>
        <div class='modal-dialog'>
                  <div class='modal-content'>
@@ -194,136 +196,380 @@ $query = "  SELECT
               <div class='modal-footer'>
 <button type='button' class='btn btn-info' data-dismiss='modal'>¡Entiendo!</button>
                </div>
-                                    </div>
-                                </div>
-                            </div>";
+                </div>
+            </div>
+        </div>";
           break;
 								    }
     }
-    }
 ?> 
 <!DOCTYPE html>
-<!--[if lt IE 7]>
-<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>
-<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>
-<html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>
-<!-->
-<html class="no-js">
-<!--<![endif]-->
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>SCPS</title>
-<meta name="description" content="Sistema de control de profesores y secciones 1.0">
-<meta name="viewport" content="width=device-width">
-    <!-- Core CSS - Include with every page -->
-    <link rel="stylesheet" type="text/css" href="assets/css/introjs.min.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/introjs-rtl.min.css">
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="assets/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet" />
-    <style type="text/css">.input-group-addon.primary {
-    color: rgb(255, 255, 255);
-    background-color: rgb(50, 118, 177);
-    border-color: rgb(40, 94, 142);
-}
-.input-group-addon.success {
-    color: rgb(255, 255, 255);
-    background-color: rgb(92, 184, 92);
-    border-color: rgb(76, 174, 76);
-}
-.input-group-addon.info {
-    color: rgb(255, 255, 255);
-    background-color: rgb(57, 179, 215);
-    border-color: rgb(38, 154, 188);
-}
-.input-group-addon.warning {
-    color: rgb(255, 255, 255);
-    background-color: rgb(240, 173, 78);
-    border-color: rgb(238, 162, 54);
-}
-.input-group-addon.danger {
-    color: rgb(255, 255, 255);
-    background-color: rgb(217, 83, 79);
-    border-color: rgb(212, 63, 58);
-}
-</style>
-      <!-- END CORE CSS -->
-</head>
-<body>
-<div class="container">
-  <div class="row">
-    <div class="col-xs-8 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-      <form name="form_login" method="post" action="index.php" role="form" data-step="6" data-intro="Bueno, aqui lo tienes, solo tienes que comenzar a utilizar el sistema, si aun tienes dudas verifica el FAQ. Suerte">
-        <fieldset>
-          <h1 align="center" data-step="1" data-intro="Bienvenido al tour del panel de login. Vamos a aprender a entrar al sistema!">Conectarse al SCPS.</h1>
-          <hr class="colorgraph">
-          <div class="form-group">
-            <div class="input-group" data-validate="email">
-            <input data-step="2" data-intro="En este campo deberas introducir tu correo electronico, recuerda colocar el @ y el dominio, ejemplo: Administrador@Sistema.com" name="correo" for="validate-email" type="email" required="required" class="form-control input-lg" id="correo" placeholder="Correo electronico"><span class="input-group-addon danger"><span class="fa fa-warning fa-fw"></span></span>
-            </div>
-          </div>
-          <div class="form-group">
-          <div class="input-group" data-validate="length" data-length="7">
-            <input data-step="3" data-intro="Aquí deberas colocar tu contraseña, si tienes problemas contacta al administrador :)" name="password" type="password" required="required" class="form-control input-lg" id="password" placeholder="Contraseña" >
-            <span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
-          </div></div>
-          <span class="button-checkbox">Recordarme?
-          <input data-step="4" data-intro="Este campo es crucial, si lo marcas te recordaremos por un dia, pero si no lo marcas, tu conexion solo durara 1 hora, despues de eso seras expulsado del sistema" type="checkbox" name="recordar" id="recordar" checked="checked" value="1">
-          </span>
-          
-          
-         <hr class="colorgraph">
-          <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-6">
-              <input type="submit" name="Submit" value="Entrar" class="btn btn-lg btn-success btn-block">
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-6"> <a href="registro.php" target="_self" class="btn btn-lg btn-primary btn-block">Registrarse</a> </div>
-          </div>
-          <br>
-                        <div class="panel panel-default">
-                        <div class="panel-heading">
-                            ¿Necesitas ayuda?
-                        </div>
-                        <div class="panel-body">
-                            <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#Ayuda" type="button" data-step="5" data-intro="Si aun tienes problemas, puedes hacer click aqui! Hay informacion que te puede ser de utilidad">
-                                ¡Ayuda!
-                            </button>
-                        <a class="btn btn-primary btn-lg btn-success" href="javascript:void(0);" onclick="javascript:introJs().setOption('showBullets', false).start();">¿Quieres un tour?</a>
-                            <div class="modal fade" id="Ayuda" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title" id="myModalLabel">Ayuda para loguearse.</h4>
-                                        </div>
-                                        <div class="modal-body">Entrar al <strong>SCPS</strong> es simple, solamente necesitas utilizar los datos proporcionados por el administrador de sistemas, los cuales constan de un correo electronico del formato "<strong>correo@electronico.com</strong>" y una "<strong>contraseña</strong>". Si necesitas más ayuda contacta con el <em>administrador de sistemas</em>.</br></br> Un ejemplo de un inicio de sesion correcto seria el siguiente.</br></br><h3>Usuario: <label class="label label-info">Miguel@correo.com</label></h3><h3>Contraseña: <label class="label label-primary">MiClaveSecreta</label> </h3>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-info" data-dismiss="modal">¡Entiendo!</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-        </fieldset>
-      </form>
-    </div>
-  </div>
-</div>   
-    <!-- Core Scripts - Include with every page -->
-    <script src="assets/js/jquery.2.1.1.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="assets/js/intro.min.js"></script>
-    <!-- Scripts extra -->
-    <script src="assets/js/validar.js"></script>  
-    <script type="text/javascript">
-    $(window).load(function(){
-        $('#Alerta').modal('show');
-    });
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>Entrar al sistema - SRCP</title>
+
+		<meta name="description" content="User login page" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="assets/font-awesome/4.2.0/css/font-awesome.min.css" />
+
+		<!-- text fonts -->
+		<link rel="stylesheet" href="assets/fonts/fonts.googleapis.com.css" />
+
+		<!-- ace styles -->
+		<link rel="stylesheet" href="assets/css/ace.min.css" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="assets/css/ace-part2.min.css" />
+		<![endif]-->
+		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.min.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+	<body class="login-layout">
+		<div class="main-container">
+			<div class="main-content">
+				<div class="row">
+					<div class="col-sm-10 col-sm-offset-1">
+						<div class="login-container">
+							<div class="center">
+								<h1>
+									<i class="ace-icon fa fa-leaf green"></i>
+									<span class="red">Sistema </span>
+									<span class="white" id="id-text2">Registro y control de profesores</span>
+								</h1>
+								<h4 class="blue" id="id-company-text">&copy; José Suárez</h4>
+							</div>
+
+							<div class="space-6"></div>
+
+							<div class="position-relative">
+								<div id="login-box" class="login-box visible widget-box no-border">
+									<div class="widget-body">
+										<div class="widget-main">
+											<h4 class="header blue lighter bigger">
+												<i class="ace-icon fa fa-coffee green"></i>
+												Por favor introduzca sus datos
+											</h4>
+
+											<div class="space-6"></div>
+
+											<form name="form_login" method="post" action="index.php" role="form">
+												<fieldset>
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-left">
+															<input type="email" name="correo" id="correo" required class="form-control" placeholder="Correo electronico" />
+															<i class="ace-icon fa fa-user"></i>
+														</span>
+													</label>
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-left">
+															<input type="password" name="password" id="password" class="form-control" placeholder="Contraseña" required />
+															<i class="ace-icon fa fa-lock"></i>
+														</span>
+													</label>
+
+													<div class="space"></div>
+
+													<div class="clearfix">
+														<label class="inline">
+															<input type="checkbox" class="ace" name="recordar" id="recordar" checked="checked" value="1" />
+															<span class="lbl"> Recordarme? </span>
+														</label>
+
+														<button type="submit" class="width-35 pull-right btn btn-sm btn-primary">
+															<i class="ace-icon fa fa-key"></i>
+															<span class="bigger-110">Login</span>
+														</button>
+													</div>
+
+													<div class="space-4"></div>
+												</fieldset>
+											</form>
+
+											<div class="social-or-login center">
+												<span class="bigger-110">Usa las redes sociales</span>
+											</div>
+
+											<div class="space-6"></div>
+
+											<div class="social-login center">
+												<a class="btn btn-primary">
+													<i class="ace-icon fa fa-facebook"></i>
+												</a>
+
+												<a class="btn btn-info">
+													<i class="ace-icon fa fa-twitter"></i>
+												</a>
+
+												<a class="btn btn-danger">
+													<i class="ace-icon fa fa-google-plus"></i>
+												</a>
+											</div>
+										</div><!-- /.widget-main -->
+
+										<div class="toolbar clearfix">
+											<div>
+												<a href="#" data-target="#forgot-box" class="forgot-password-link">
+													<i class="ace-icon fa fa-arrow-left"></i>
+													¿Olvidaste tu clave?
+												</a>
+											</div>
+
+											<div>
+												<a href="#" data-target="#signup-box" class="user-signup-link">
+													Me quiero registrar
+													<i class="ace-icon fa fa-arrow-right"></i>
+												</a>
+											</div>
+										</div>
+									</div><!-- /.widget-body -->
+								</div><!-- /.login-box -->
+
+								<div id="forgot-box" class="forgot-box widget-box no-border">
+									<div class="widget-body">
+										<div class="widget-main">
+											<h4 class="header red lighter bigger">
+												<i class="ace-icon fa fa-key"></i>
+												Recuperar contraseña
+											</h4>
+
+											<div class="space-6"></div>
+											<p>
+												Coloque su correo electronico para recivir las instrucciones.
+											</p>
+
+											<form>
+												<fieldset>
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="email" class="form-control" placeholder="Correo" />
+															<i class="ace-icon fa fa-envelope"></i>
+														</span>
+													</label>
+
+													<div class="clearfix">
+														<button type="button" class="width-35 pull-right btn btn-sm btn-danger">
+															<i class="ace-icon fa fa-lightbulb-o"></i>
+															<span class="bigger-110">Enviar!</span>
+														</button>
+													</div>
+												</fieldset>
+											</form>
+										</div><!-- /.widget-main -->
+
+										<div class="toolbar center">
+											<a href="#" data-target="#login-box" class="back-to-login-link">
+												Regresar al panel de inicio de sesion
+												<i class="ace-icon fa fa-arrow-right"></i>
+											</a>
+										</div>
+									</div><!-- /.widget-body -->
+								</div><!-- /.forgot-box -->
+
+								<div id="signup-box" class="signup-box widget-box no-border">
+									<div class="widget-body">
+										<div class="widget-main">
+											<h4 class="header green lighter bigger">
+												<i class="ace-icon fa fa-users blue"></i>
+												Registrar nuevo usuario.
+											</h4>
+
+											<div class="space-6"></div>
+											<p> Rellene con sus datos para registrarse. </p>
+
+											<form action="registro.php" method="post" role="form" name="form_registro">
+												<fieldset>
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" class="form-control" placeholder="Nombre" id="nombre" required />
+															<i class="ace-icon fa fa-user"></i>
+														</span>
+													</label>
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" class="form-control" placeholder="Apellido" id="apellido" required />
+															<i class="ace-icon fa fa-user"></i>
+														</span>
+													</label>
+																										<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" class="form-control" placeholder="Cedula" />
+															<i class="ace-icon fa  fa-credit-card"></i>
+														</span>
+													</label>
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="email" class="form-control" placeholder="Correo" />
+															<i class="ace-icon fa fa-envelope"></i>
+														</span>
+													</label>
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" class="form-control" placeholder="Telefono" />
+															<i class="ace-icon fa fa-mobile-phone"></i>
+														</span>
+													</label>
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" class="form-control" placeholder="Contraseña" />
+															<i class="ace-icon fa fa-lock"></i>
+														</span>
+													</label>
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" class="form-control" placeholder="Direccion" />
+															<i class="ace-icon fa fa-globe"></i>
+														</span>
+													</label>
+
+													<label class="block">
+														<input type="checkbox" class="ace" />
+														<span class="lbl">
+															Acepto los 
+															<a href="#">Terminos y condiciones</a>
+														</span>
+													</label>
+
+													<div class="space-24"></div>
+
+													<div class="clearfix">
+														<button type="reset" class="width-30 pull-left btn btn-sm">
+															<i class="ace-icon fa fa-refresh"></i>
+															<span class="bigger-110">Limpiar</span>
+														</button>
+
+														<button type="submit" class="width-65 pull-right btn btn-sm btn-success">
+															<span class="bigger-110">Registrar</span>
+
+															<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+														</button>
+													</div>
+												</fieldset>
+											</form>
+										</div>
+
+										<div class="toolbar center">
+											<a href="#" data-target="#login-box" class="back-to-login-link">
+												<i class="ace-icon fa fa-arrow-left"></i>
+												Regresar al panel de inicio de sesion.
+											</a>
+										</div>
+									</div><!-- /.widget-body -->
+								</div><!-- /.signup-box -->
+							</div><!-- /.position-relative -->
+
+							<div class="navbar-fixed-top align-right">
+								<br />
+								&nbsp;
+								<a id="btn-login-dark" href="#">Dark</a>
+								&nbsp;
+								<span class="blue">/</span>
+								&nbsp;
+								<a id="btn-login-blur" href="#">Blur</a>
+								&nbsp;
+								<span class="blue">/</span>
+								&nbsp;
+								<a id="btn-login-light" href="#">Light</a>
+								&nbsp; &nbsp; &nbsp;
+							</div>
+						</div>
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+        <script src="assets/js/jquery.gritter.min.js"></script>
+
+		<!--[if !IE]> -->
+		<script src="assets/js/jquery.2.1.1.min.js"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="assets/js/jquery.1.11.1.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='assets/js/jquery.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="assets/js/bootstrap.min.js"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='assets/js/jquery1x.min.js'>"+"<"+"/script>");
 </script>
-</body>
-</html> 
+<![endif]-->
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+			jQuery(function($) {
+			 $(document).on('click', '.toolbar a[data-target]', function(e) {
+				e.preventDefault();
+				var target = $(this).data('target');
+				$('.widget-box.visible').removeClass('visible');//hide others
+				$(target).addClass('visible');//show target
+			 });
+			});
+			// automatic modal
+			    $(window).load(function(){
+        		$('#Alerta').modal('show');
+    			});
+			
+			
+			//you don't need this, just used for changing background
+			jQuery(function($) {
+			 $('#btn-login-dark').on('click', function(e) {
+				$('body').attr('class', 'login-layout');
+				$('#id-text2').attr('class', 'white');
+				$('#id-company-text').attr('class', 'blue');
+				
+				e.preventDefault();
+			 });
+			 $('#btn-login-light').on('click', function(e) {
+				$('body').attr('class', 'login-layout light-login');
+				$('#id-text2').attr('class', 'grey');
+				$('#id-company-text').attr('class', 'blue');
+				
+				e.preventDefault();
+			 });
+			 $('#btn-login-blur').on('click', function(e) {
+				$('body').attr('class', 'login-layout blur-login');
+				$('#id-text2').attr('class', 'white');
+				$('#id-company-text').attr('class', 'light-blue');
+				
+				e.preventDefault();
+			 });
+			 
+			});
+		</script>
+	</body>
+</html>
