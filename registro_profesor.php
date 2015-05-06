@@ -5,12 +5,11 @@ if (isset($_COOKIE["id_usuario"]) && isset($_COOKIE["marca_aleatoria_usuario"]))
    //además voy a comprobar que esas variables no estén vacías
    if ($_COOKIE["id_usuario"]!="" || $_COOKIE["marca_aleatoria_usuario"]!=""){
 // 
-$query = "  SELECT 
+$query = "SELECT
                 nombre, 
                 apellido
-            FROM usuarios 
-            WHERE 
-                ID = :id 
+          FROM usuarios 
+          WHERE ID = :id 
         "; 
         $query_params = array( 
             ':id' => $_COOKIE['id_usuario'] 
@@ -22,58 +21,123 @@ $query = "  SELECT
         } 
         catch(PDOException $ex){ 
 		echo "<div class='panel-body'>
-                            <div class='alert alert-warning alert-dismissable'>
-                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
-								</div>" .$ex->getMessage();
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+				</div>
+			</div>" .$ex->getMessage();
 		} 
         $row = $stmt->fetchAll();
    }
 }else{
-	header('Location: login.php?accion=log_error');
+	header('Location: index.php?accion=log_error');
 	}
 
 	//comienzo del registro de los profesores.
     if(!empty($_POST))
     {
-        // Nos aseguramos de que escriban todos los campos. por servidor, por si alguien quiere meter datos escondidos.
+        /** 
+         * Nos aseguramos de que escriban todos los campos. por servidor, por si alguien quiere meter datos escondidos.
+         * Aqui tenemos las opciones en DIE, pero se piensa cambiar a un modal en versiones siguientes
+         * La opcion Die, elimina todos los datos de la pagina y solo muestra ese mensaje.
+         */
 		if(empty($_POST['cedula']))
-        { die("Coloque la cedula."); }
+        { 
+        	//die("Coloque la cedula."); 
+        	echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: Coloque su cedula.</div>
+			</div>";
+		}
         if(empty($_POST['nombre']))
-        { die("Coloque el nombre."); }
+        { 
+        	//die("Coloque el nombre."); 
+        	echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: Coloque su nombre.</div>
+			</div>";
+        	}
         if(empty($_POST['apellido']))
-        { die("Coloque el apellido."); }
+        { 
+        	//die("Coloque el apellido."); 
+        echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: Coloque su apellido.</div>
+			</div>";
+		}
         if(empty($_POST['direccion']))
-        { die("Coloque el direccion."); }
+        { 
+        	//die("Coloque el direccion."); 
+        echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: Coloque su direccion.</div>
+			</div>";
+		}
         if(empty($_POST['telefono']))
-        { die("Coloque el telefono."); }
+        { 
+        	//die("Coloque el telefono."); 
+        echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: Coloque su telefono.</div>
+			</div>";
+		}
 		if(empty($_POST['correo']))
-        { die("Coloque el correo."); }
+        { 
+        	//die("Coloque el correo."); 
+        echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: Coloque su correo.</div>
+			</div>";
+		}
         if(!filter_var($_POST['correo'], FILTER_VALIDATE_EMAIL))
-        { die("El correo electronico es invalido."); }
+        { 
+        	//die("El correo electronico es invalido."); 
+        echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: el correo no es valido.</div>
+			</div>";
+		}
 		// Chequeamos si la cedula existe
 					
-        $query = "
-            SELECT
-                1
-            FROM profesores
-            WHERE
-                cedula = :cedula
-        ";
+        $query = '
+            		SELECT 1
+            		FROM profesores
+            		WHERE cedula = :cedula
+        		  ';
         $query_params = array( ':cedula' => $_POST['cedula'] );
         try {
             $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
         }
-        catch(PDOException $ex){ die("Fallamos al hacer la busqueda: " . $ex->getMessage()); }
+        catch(PDOException $ex){ 
+        	/**
+        	 * Aqui de igual forma cambiaremos a un modal
+        	 */
+        	die("Fallamos al hacer la busqueda: " . $ex->getMessage()); }
         $row = $stmt->fetch();
-        if($row){ die("El profesor con la cedula introducida, ya esta registrado.");  }
+        if($row){ 
+        	/**
+        	 * Aqui de igual forma cambiaremos a un modal
+        	 */
+        	//die("El profesor con la cedula introducida, ya esta registrado.");  
+        	echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: La cedula ya existe.</div>
+			</div>";
+		}
         $query = "
-            SELECT
-                1
+            SELECT 1
             FROM profesores
-            WHERE
-                correo = :correo
-        ";
+            WHERE correo = :correo
+        		 ";
         $query_params = array(
             ':correo' => $_POST['correo']
         );
@@ -83,7 +147,14 @@ $query = "  SELECT
         }
         catch(PDOException $ex){ die("Fallamos al revisar el email.: " . $ex->getMessage());}
         $row = $stmt->fetch();
-        if($row){ die("Este correo ya esta en uso");  }
+        if($row){ 
+        	//die("Este correo ya esta en uso");  
+        	echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: El correo ya esta en uso.</div>
+			</div>";
+		}
 
 
         /// Si todo pasa enviamos los datos a la base de datos mediante PDO para evitar Inyecciones SQL
@@ -101,7 +172,9 @@ $query = "  SELECT
                 formacion,
                 especialidad,
                 banco,
-                nr_cuenta
+                nr_cuenta,
+                sueldo,
+                seguro_social
             ) VALUES (
                 :nombre,
                 :apellido,
@@ -115,7 +188,9 @@ $query = "  SELECT
                 :formacion,
                 :especialidad,
                 :banco,
-                :nr_cuenta
+                :nr_cuenta,
+                :sueldo,
+                :seguro
             )
         ";
             $query_params = array(
@@ -131,7 +206,9 @@ $query = "  SELECT
             ':formacion' => $_POST['formacion'],
             ':especialidad' => $_POST['especialidad'],
             ':banco' => $_POST['banco'],
-            ':nr_cuenta' => $_POST['nr_cuenta']
+            ':nr_cuenta' => $_POST['nr_cuenta'],
+            ':sueldo' => $_POST['sueldo'],
+            ':seguro' => $_POST['seguro']
         );
         try { 
             $stmt = $db->prepare($query);
@@ -141,9 +218,12 @@ $query = "  SELECT
 		// Si tenemos problemas para ejecutar la consulta imprimimos el error
 			echo "<div class='panel-body'>
                      <div class='alert alert-warning alert-dismissable'>
-                          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
-								</div>" .$ex->getMessage();}
-			// Si todo pasa como deberia ser, referimos al usuario al panel de inicio de sesion con el mensaje de bienvenida.
+                        <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                        Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+					</div>
+				  </div>" .$ex->getMessage();}
+			// Si todo pasa como deberia ser, referimos al usuario al panel de 
+			// inicio de sesion con el mensaje de bienvenida.
 		header('Location: listar_profesor.php');
 }
 
@@ -153,9 +233,12 @@ $query = "  SELECT
     switch ($_GET['accion']) {
         case 'error':
             echo "<div class='panel-body'>
-                            <div class='alert alert-success alert-dismissable'>
-                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Hay varios errores en tu registro. Si necesitas ayuda puedes hacer click al boton de Ayuda en el fondo de la página.
-								</div>";
+                    <div class='alert alert-success alert-dismissable'>
+                      <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                      Hay varios errores en tu registro. 
+                      Si necesitas ayuda puedes hacer click al boton de Ayuda en el fondo de la página.
+					</div>
+				</div>";
             break;
     }
 
@@ -178,9 +261,11 @@ $query = "  SELECT
         } 
         catch(PDOException $ex){ 
 		echo "<div class='panel-body'>
-                            <div class='alert alert-warning alert-dismissable'>
-                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
-								</div>" .$ex->getMessage();
+                <div class='alert alert-warning alert-dismissable'>
+                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                 Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+				</div>" .$ex->getMessage();
+		echo "</div>";
 		} 
         $row = $stmt->fetch();
 ?>
@@ -191,7 +276,7 @@ $query = "  SELECT
 		<meta charset="utf-8" />
 		<title>Registro de profesores - SRCP</title>
 
-		<meta name="description" content="overview &amp; stats" />
+		<meta name="description" content="Registro de profesores" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
 		<!-- bootstrap & fontawesome -->
@@ -202,6 +287,9 @@ $query = "  SELECT
 		<link rel="stylesheet" href="assets/css/select2.min.css" />
 		<link rel="stylesheet" href="assets/css/bootstrap-multiselect.min.css" />
 		<style type="text/css">
+		/*
+		Inicio del wizard del registro de profesores.
+		 */
 				.stepwizard-step p {
 				    margin-top: 10px;
 				}
@@ -299,7 +387,7 @@ $query = "  SELECT
 					</a>
 				</div>
 				<!--menu-->
-								<div class="navbar-buttons navbar-header pull-right" role="navigation">
+				<div class="navbar-buttons navbar-header pull-right" role="navigation">
 					<ul class="nav ace-nav">
 						<li class="light-blue">
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
@@ -307,10 +395,8 @@ $query = "  SELECT
 								<span class="user-info">
 								Bienvenido, <?php echo $row['nombre']?>
 								</span>
-
 								<i class="ace-icon fa fa-caret-down"></i>
 							</a>
-
 							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 								<li>
 									<a href="#">
@@ -342,20 +428,12 @@ $query = "  SELECT
 		</div>
 
 		<div class="main-container" id="main-container">
-			<script type="text/javascript">
-				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
-			</script>
-
-			<div id="sidebar" class="sidebar                  responsive">
-				<script type="text/javascript">
-					try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
-				</script>
-
+			<div id="sidebar" class="sidebar responsive">
 				<ul class="nav nav-list">
 					<li class="active">
 						<a href="index.php">
 							<i class="menu-icon fa fa-tachometer"></i>
-							<span class="menu-text"> Panel de control</span>
+							<span class="menu-text">Panel de control</span>
 						</a>
 
 						<b class="arrow"></b>
@@ -468,19 +546,11 @@ $query = "  SELECT
 				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
 					<i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
 				</div>
-
-				<script type="text/javascript">
-					try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
-				</script>
 			</div>
 
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs" id="breadcrumbs">
-						<script type="text/javascript">
-							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
-						</script>
-
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
@@ -488,7 +558,8 @@ $query = "  SELECT
 							</li>
 							<li>Profesores</li>
 							<li class="active">Registro de profesores</li>
-						</ul><!-- /.breadcrumb -->
+						</ul>
+						<!-- /.breadcrumb -->
 
 						<div class="nav-search" id="nav-search">
 							<form class="form-search">
@@ -512,13 +583,6 @@ $query = "  SELECT
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
-								<div class="widget-box">
-									<div class="widget-header widget-header-blue widget-header-flat">
-										<h4 class="widget-title lighter" align="center">Asistente de registro de profesores.<span class="ace-icon fa  fa-graduation-cap"></span></h4>
-									</div>
-
-									<div class="widget-body">
-										<div class="widget-main">
 							<div class="stepwizard">
     <div class="stepwizard-row setup-panel">
         <div class="stepwizard-step">
@@ -535,14 +599,24 @@ $query = "  SELECT
         </div>
     </div>
 </div>
+
 <form role="form" name="form_registro_profesor" method="post" action="registro_profesor.php">
     <div class="step-content pos-rel">
 		  <div class="active setup-content" id="step-1">
 		<div class="col-xs-12">
             <div class="col-md-12">
             </br>
+            	<div class="form-group">
+					<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="cedula">Cedula:</label>
+
+					<div class="col-xs-12 col-sm-9">
+						<div class="clearfix">
+							<input type="text" name="cedula" id="cedula" class="col-xs-12 col-sm-4 input-large" />
+						</div>
+					</div>
+				</div>
    				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="nombre">Nombre: </label>
+					<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="nombre">Nombre:</label>
 
 					<div class="col-xs-12 col-sm-9">
 						<div class="clearfix">
@@ -557,16 +631,6 @@ $query = "  SELECT
 					<div class="col-xs-12 col-sm-9">
 						<div class="clearfix">
 							<input type="text" name="apellido" id="apellido" class="col-xs-12 col-sm-4 input-large" />
-						</div>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="cedula">Cedula:</label>
-
-					<div class="col-xs-12 col-sm-9">
-						<div class="clearfix">
-							<input type="text" name="cedula" id="cedula" class="col-xs-12 col-sm-4 input-large" />
 						</div>
 					</div>
 				</div>
@@ -632,9 +696,9 @@ $query = "  SELECT
 					<div class="col-xs-12 col-sm-9">
 						<div class="clearfix">
 							<select class="input-medium" id="condicion" name="condicion">
-								<option value="General">General</option>
-								<option value="Medio">Medio</option>
-								<option value="Condicional">Condicional</option>
+								<option value="Tiempo completo">Tiempo completo</option>
+								<option value="Tiempo parcial">Tiempo parcial</option>
+								<option value="Pago por hora">Pago por hora</option>
 							</select>
 						</div>
 					</div>
@@ -648,7 +712,7 @@ $query = "  SELECT
         <div class="col-xs-12">
             <div class="col-md-12">												                
 								<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="formacion">Formacion profesional</label>
+								<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="formacion">Titulacion</label>
 
 												<div class="col-xs-12 col-sm-9">
 													<div class="clearfix">
@@ -663,11 +727,16 @@ $query = "  SELECT
 											</div>
 
 											<div class="form-group">
-												<label class="control-label col-xs-12 col-sm-3 no-padding-right">Especialidad:</label>
+												<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="especialidad">Especialidad</label>
 
 												<div class="col-xs-12 col-sm-9">
 													<div class="clearfix">
-														<input type="text" name="especialidad" id="especialidad" class="col-xs-12 col-sm-4" />
+														<select class="input-medium" id="especialidad" name="especialidad">
+															<option value="Ingeniero">Matematica</option>
+															<option value="Licenciado">Sistemas</option>
+															<option value="Magister">Informatica</option>
+															<option value="Doctor">Electrica</option>
+														</select>
 													</div>
 												</div>
 											</div>
@@ -684,9 +753,7 @@ $query = "  SELECT
 												</select>
 											</div>
 											</div>
-
-
-									                <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" >Siguiente</button>
+											 <button class="btn btn-primary nextBtn btn-lg pull-right" type="button" >Siguiente</button>
 									            </div>
 									        </div>
 									    </div>
@@ -696,11 +763,16 @@ $query = "  SELECT
 									                <h3> Datos financieros</h3>
 
 											<div class="form-group">
-												<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="banco">Banco:</label>
+												<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="banco">Banco</label>
 
 												<div class="col-xs-12 col-sm-9">
 													<div class="clearfix">
-														<input type="text" name="banco" id="banco" class="col-xs-12 col-sm-4" />
+														<select class="input-medium" id="banco" name="banco">
+															<option value="Banco de Venezuela">Banco de Venezuela</option>
+															<option value="Mercantil">Mercantil</option>
+															<option value="Banco del tesoro">Banco del tesoro</option>
+															<option value="Bicentenario">Bicentenario</option>
+														</select>
 													</div>
 												</div>
 											</div>
@@ -714,20 +786,20 @@ $query = "  SELECT
 												</div>
 											</div>
 											<div class="form-group">
-												<label class="control-label col-xs-12 col-sm-3 no-padding-right">Dato extra (Opcional):</label>
+												<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="seguro">Numero de seguro social:</label>
 
 												<div class="col-xs-12 col-sm-9">
 													<div class="clearfix">
-														<input type="text" name="Dat" id="Dat" class="col-xs-12 col-sm-4" />
+														<input type="text" name="seguro" id="seguro" class="col-xs-12 col-sm-4" />
 													</div>
 												</div>
 											</div>
 											<div class="form-group">
-												<label class="control-label col-xs-12 col-sm-3 no-padding-right">Dato extra (Opcional):</label>
+												<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="sueldo">Sueldo actual:</label>
 
 												<div class="col-xs-12 col-sm-9">
 													<div class="clearfix">
-														<input type="text" name="eDat" id="eDat" class="col-xs-12 col-sm-4" />
+														<input type="text" name="sueldo" id="sueldo" class="col-xs-12 col-sm-4" />
 													</div>
 												</div>
 											</div>

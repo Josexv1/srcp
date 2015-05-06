@@ -14,8 +14,7 @@ $query = "  SELECT
                 telefono,
 				correo
             FROM usuarios 
-            WHERE 
-                ID = :id 
+            WHERE ID = :id 
         "; 
         $query_params = array( 
             ':id' => $_COOKIE['id_usuario'] 
@@ -27,9 +26,11 @@ $query = "  SELECT
         } 
         catch(PDOException $ex){ 
 		echo "<div class='panel-body'>
-                            <div class='alert alert-warning alert-dismissable'>
-                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
-								</div>" .$ex->getMessage();
+                <div class='alert alert-warning alert-dismissable'>
+                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                    Tenemos problemas al ejecutar la consulta, El error es el siguiente: 
+				</div>
+            </div>" .$ex->getMessage();
 		} 
         $row = $stmt->fetch();
    }
@@ -54,7 +55,7 @@ $query = "  SELECT
         <meta charset="utf-8" />
         <title>Lista de profesores</title>
 
-        <meta name="description" content="overview &amp; stats" />
+        <meta name="description" content="Listar profesores" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
         <!-- bootstrap & fontawesome -->
@@ -160,16 +161,8 @@ $query = "  SELECT
         </div>
 
         <div class="main-container" id="main-container">
-            <script type="text/javascript">
-                try{ace.settings.check('main-container' , 'fixed')}catch(e){}
-            </script>
-
             <div id="sidebar" class="sidebar                  responsive">
-                <script type="text/javascript">
-                    try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
-                </script>
-
-                <ul class="nav nav-list">
+               <ul class="nav nav-list">
                     <li class="active">
                         <a href="index.html">
                             <i class="menu-icon fa fa-tachometer"></i>
@@ -286,19 +279,12 @@ $query = "  SELECT
                 <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
                     <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
                 </div>
-
-                <script type="text/javascript">
-                    try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
-                </script>
             </div>
 
             <div class="main-content">
                 <div class="main-content-inner">
                     <div class="breadcrumbs" id="breadcrumbs">
-                        <script type="text/javascript">
-                            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
-                        </script>
-
+                
                         <ul class="breadcrumb">
                             <li>
                                 <i class="ace-icon fa fa-home home-icon"></i>
@@ -345,7 +331,6 @@ $query = "  SELECT
                                 <table class="table" id="Lista_profesores">
                                     <thead>
                                         <tr class="info">
-                                        	<th>ID</th>
                                             <th>Cedula</th>
                                             <th>Nombre</th>
                                             <th>Apellido</th>
@@ -363,8 +348,7 @@ $query = "  SELECT
             foreach ($rows as $row) {  
         ?>
             <tr>
-            	<td><?php echo $row['ID']; ?></td>
-                <td><?php echo $row['cedula']; ?></td>
+            	<td><?php echo $row['cedula']; ?></td>
                 <td><?php echo $row['nombre']; ?></td>
                 <td><?php echo $row['apellido']; ?></td>
                 <td><?php echo $row['direccion']; ?></td>
@@ -465,66 +449,6 @@ $query = "  SELECT
 
         <!-- inline scripts related to this page -->
         <script type="text/javascript">
-                ////////////////// el multi select !! !
-                $('.multiselect').multiselect({
-                 enableFiltering: true,
-                 buttonClass: 'btn btn-white btn-primary',
-                 templates: {
-                    button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown"></button>',
-                    ul: '<ul class="multiselect-container dropdown-menu"></ul>',
-                    filter: '<li class="multiselect-item filter"><div class="input-group"><span class="input-group-addon"><i class="fa fa-search"></i></span><input class="form-control multiselect-search" type="text"></div></li>',
-                    filterClearBtn: '<span class="input-group-btn"><button class="btn btn-default btn-white btn-grey multiselect-clear-filter" type="button"><i class="fa fa-times-circle red2"></i></button></span>',
-                    li: '<li><a href="javascript:void(0);"><label></label></a></li>',
-                    divider: '<li class="multiselect-item divider"></li>',
-                    liGroup: '<li class="multiselect-item group"><label class="multiselect-group"></label></li>'
-                 }
-                });
-
-
-                // wizard
-                $(document).ready(function () {
-
-                        var navListItems = $('div.setup-panel div a'),
-                                allWells = $('.setup-content'),
-                                allNextBtn = $('.nextBtn');
-
-                        allWells.hide();
-
-                        navListItems.click(function (e) {
-                            e.preventDefault();
-                            var $target = $($(this).attr('href')),
-                                    $item = $(this);
-
-                            if (!$item.hasClass('disabled')) {
-                                navListItems.removeClass('btn-primary').addClass('btn-default');
-                                $item.addClass('btn-primary');
-                                allWells.hide();
-                                $target.show();
-                                $target.find('input:eq(0)').focus();
-                            }
-                        });
-
-                        allNextBtn.click(function(){
-                            var curStep = $(this).closest(".setup-content"),
-                                curStepBtn = curStep.attr("id"),
-                                nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
-                                curInputs = curStep.find("input[type='text'],input[type='url']"),
-                                isValid = true;
-
-                            $(".form-group").removeClass("has-error");
-                            for(var i=0; i<curInputs.length; i++){
-                                if (!curInputs[i].validity.valid){
-                                    isValid = false;
-                                    $(curInputs[i]).closest(".form-group").addClass("has-error");
-                                }
-                            }
-
-                            if (isValid)
-                                nextStepWizard.removeAttr('disabled').trigger('click');
-                        });
-
-                        $('div.setup-panel div a.btn-primary').trigger('click');
-                    });
 
             // comienzo del script para las tablas.
             jQuery(function($) {
