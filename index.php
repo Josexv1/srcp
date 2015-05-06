@@ -250,7 +250,7 @@ $query = "  SELECT
 								<h1>
 									<i class="ace-icon fa fa-leaf green"></i>
 									<span class="red">Sistema </span>
-									<span class="white" id="id-text2">Registro y control de profesores</span>
+									<span class="white" id="id-text2">Registro y Control de Profesores</span>
 								</h1>
 								<h4 class="blue" id="id-company-text">&copy; José Suárez</h4>
 							</div>
