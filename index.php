@@ -5,13 +5,12 @@ if (isset($_COOKIE["id_usuario"]) && isset($_COOKIE["marca_aleatoria_usuario"]))
    //además voy a comprobar que esas variables no estén vacías
    if ($_COOKIE["id_usuario"]!="" || $_COOKIE["marca_aleatoria_usuario"]!=""){
 // 
-$query = "  SELECT 
-				ID, 
-                password,
-				salt,
-				correo,
-            FROM usuarios 
-            WHERE ID = :id 
+$query = "  SELECT  ID, 
+                	password,
+					salt,
+					correo,
+            FROM 	usuarios 
+            WHERE 	ID = :id 
         "; 
         $query_params = array( 
             ':id' => $_COOKIE['id_usuario'] 
@@ -27,22 +26,20 @@ $query = "  SELECT
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                 Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
 				</div>
-			 </div>" .$ex->getMessage();
-		} 
+			 " .$ex->getMessage();
+		echo "</div>";
+				} 
         $row = $stmt->fetch();
 		header('Location: panel.php');
    } // Terminamos de probar la cookie
 } // Fin del isset de la cookie.
     if(!empty($_POST)){ 
-        $query = " 
-            SELECT 
-                ID, 
-                password,
-                salt,
-                correo
-            FROM usuarios 
-            WHERE 
-                correo = :correo 
+        $query = "  SELECT	ID, 
+		                	password,
+		                	salt,
+		                	correo
+		            FROM 	usuarios 
+		            WHERE	correo = :correo 
         "; 
         $query_params = array( 
             ':correo' => $_POST['correo'] 
