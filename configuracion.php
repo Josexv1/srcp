@@ -120,8 +120,7 @@ $query = "  SELECT
                             <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                                 <img class="nav-user-photo" src="assets/avatars/user.jpg" alt="Foto de <?php echo $row['nombre'] ?>"/>
                                 <span class="user-info">
-                                    <small>Bienvenido,</small>
-                                    <?php echo $row['nombre']?>
+                                Bienvenido, <?php echo $row['nombre']?>
                                 </span>
 
                                 <i class="ace-icon fa fa-caret-down"></i>
@@ -129,7 +128,7 @@ $query = "  SELECT
 
                             <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                                 <li>
-                                    <a href="#">
+                                    <a href="configuracion.php">
                                         <i class="ace-icon fa fa-cog"></i>
                                         Configuracion
                                     </a>
