@@ -5,19 +5,18 @@ if (isset($_COOKIE["id_usuario"]) && isset($_COOKIE["marca_aleatoria_usuario"]))
    //además voy a comprobar que esas variables no estén vacías
    if ($_COOKIE["id_usuario"]!="" || $_COOKIE["marca_aleatoria_usuario"]!=""){
 // 
-$query = "SELECT
-                nombre, 
-                apellido
-          FROM usuarios 
-          WHERE ID = :id 
+$query = "SELECT nombre, 
+                 apellido
+          FROM   usuarios 
+          WHERE  ID = :id 
         "; 
         $query_params = array( 
             ':id' => $_COOKIE['id_usuario'] 
         ); 
          
         try{ 
-            $stmt = $db->prepare($query); 
-            $result = $stmt->execute($query_params); 
+         	    $stmt = $db->prepare($query); 
+        $result = $stmt->execute($query_params); 
         } 
         catch(PDOException $ex){ 
 		echo "<div class='panel-body'>
@@ -52,8 +51,7 @@ $query = "SELECT
 		}
         if(empty($_POST['nombre']))
         { 
-        	//die("Coloque el nombre."); 
-        	echo "<div class='panel-body'>
+        echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                 Error: Coloque su nombre.</div>
@@ -61,7 +59,6 @@ $query = "SELECT
         	}
         if(empty($_POST['apellido']))
         { 
-        	//die("Coloque el apellido."); 
         echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -70,7 +67,6 @@ $query = "SELECT
 		}
         if(empty($_POST['direccion']))
         { 
-        	//die("Coloque el direccion."); 
         echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -79,7 +75,6 @@ $query = "SELECT
 		}
         if(empty($_POST['telefono']))
         { 
-        	//die("Coloque el telefono."); 
         echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -88,7 +83,6 @@ $query = "SELECT
 		}
 		if(empty($_POST['correo']))
         { 
-        	//die("Coloque el correo."); 
         echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -97,7 +91,6 @@ $query = "SELECT
 		}
         if(!filter_var($_POST['correo'], FILTER_VALIDATE_EMAIL))
         { 
-        	//die("El correo electronico es invalido."); 
         echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -106,8 +99,7 @@ $query = "SELECT
 		}
 		// Chequeamos si la cedula existe
 					
-        $query = '
-            		SELECT 1
+        $query = '  SELECT 1
             		FROM profesores
             		WHERE cedula = :cedula
         		  ';
@@ -123,20 +115,15 @@ $query = "SELECT
         	die("Fallamos al hacer la busqueda: " . $ex->getMessage()); }
         $row = $stmt->fetch();
         if($row){ 
-        	/**
-        	 * Aqui de igual forma cambiaremos a un modal
-        	 */
-        	//die("El profesor con la cedula introducida, ya esta registrado.");  
         	echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                 Error: La cedula ya existe.</div>
 			</div>";
 		}
-        $query = "
-            SELECT 1
-            FROM profesores
-            WHERE correo = :correo
+        $query = "SELECT 1
+            	  FROM profesores
+            	  WHERE correo = :correo
         		 ";
         $query_params = array(
             ':correo' => $_POST['correo']
@@ -158,41 +145,40 @@ $query = "SELECT
 
 
         /// Si todo pasa enviamos los datos a la base de datos mediante PDO para evitar Inyecciones SQL
-        $query = "
-            INSERT INTO profesores (
-                nombre,
-                apellido,
-				cedula,
-                direccion,
-                telefono,
-                correo,
-                genero,
-                estado,
-                condicion,
-                formacion,
-                especialidad,
-                banco,
-                nr_cuenta,
-                sueldo,
-                seguro_social
-            ) VALUES (
-                :nombre,
-                :apellido,
-				:cedula,
-                :direccion,
-                :telefono,
-                :correo,
-                :genero,
-                :estado,
-                :condicion,
-                :formacion,
-                :especialidad,
-                :banco,
-                :nr_cuenta,
-                :sueldo,
-                :seguro
-            )
-        ";
+        $query ="	INSERT INTO profesores (
+				                nombre,
+				                apellido,
+								cedula,
+				                direccion,
+				                telefono,
+				                correo,
+				                genero,
+				                estado,
+				                condicion,
+				                formacion,
+				                especialidad,
+				                banco,
+				                nr_cuenta,
+				                sueldo,
+				                seguro_social
+				    ) VALUES (
+				                :nombre,
+				                :apellido,
+								:cedula,
+				                :direccion,
+				                :telefono,
+				                :correo,
+				                :genero,
+				                :estado,
+				                :condicion,
+				                :formacion,
+				                :especialidad,
+				                :banco,
+				                :nr_cuenta,
+				                :sueldo,
+				                :seguro
+				            )
+        		";
             $query_params = array(
             ':nombre' => $_POST['nombre'],
 			':apellido' => $_POST['apellido'],
@@ -244,12 +230,10 @@ $query = "SELECT
 
 }
 
-$query = "  SELECT 
-                nombre, 
-                apellido
-            FROM usuarios 
-            WHERE 
-                ID = :id 
+$query = "  SELECT nombre, 
+                   apellido
+            FROM   usuarios 
+            WHERE  ID = :id 
         "; 
         $query_params = array( 
             ':id' => $_COOKIE['id_usuario'] 
@@ -284,7 +268,6 @@ $query = "  SELECT
 		<link rel="stylesheet" href="assets/font-awesome/4.2.0/css/font-awesome.min.css" />
 
 		<!-- page specific plugin styles -->
-		<link rel="stylesheet" href="assets/css/select2.min.css" />
 		<link rel="stylesheet" href="assets/css/bootstrap-multiselect.min.css" />
 		<style type="text/css">
 		/*
@@ -399,7 +382,7 @@ $query = "  SELECT
 							</a>
 							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 								<li>
-									<a href="#">
+									<a href="configuracion.php">
 										<i class="ace-icon fa fa-cog"></i>
 										Configuracion
 									</a>
@@ -583,7 +566,7 @@ $query = "  SELECT
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
-							<div class="stepwizard">
+<div class="stepwizard">
     <div class="stepwizard-row setup-panel">
         <div class="stepwizard-step">
             <a href="#step-1" type="button" class="btn btn-primary btn-circle">1</a>
@@ -599,7 +582,6 @@ $query = "  SELECT
         </div>
     </div>
 </div>
-
 <form role="form" name="form_registro_profesor" method="post" action="registro_profesor.php">
     <div class="step-content pos-rel">
 		  <div class="active setup-content" id="step-1">
@@ -634,7 +616,6 @@ $query = "  SELECT
 						</div>
 					</div>
 				</div>
-
 				<div class="form-group">
 					<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="direccion">Direccion:</label>
 
@@ -689,20 +670,21 @@ $query = "  SELECT
 							</div>
 						</div>
 					</div>
-
 				<div class="form-group">
 					<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="condicion">Condicion</label>
 
 					<div class="col-xs-12 col-sm-9">
 						<div class="clearfix">
-							<select class="input-medium" id="condicion" name="condicion">
-								<option value="Tiempo completo">Tiempo completo</option>
-								<option value="Tiempo parcial">Tiempo parcial</option>
-								<option value="Pago por hora">Pago por hora</option>
-							</select>
+							<input list="condicion" name="condicion" required="required" class="col-xs-12 col-sm-5 input-large">
+						    <datalist id="condicion">
+						        <option value="Tiempo completo">
+						        <option value="Tiempo parcial">
+						        <option value="Pago por hora">
+						        <option value="Otro">
+						    </datalist>
 						</div>
 					</div>
-				</div>
+				</div> <!-- Fin del Form Group-->
 			<button class="btn btn-primary nextBtn btn-lg pull-right" type="button" >Siguiente</button>
             </div>
         </div>
@@ -715,8 +697,8 @@ $query = "  SELECT
 								<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="formacion">Titulacion</label>
 
 												<div class="col-xs-12 col-sm-9">
-													<div class="clearfix">
-														<select class="input-medium" id="formacion" name="formacion">
+													<div class="clearfix col-sm-4">
+														<select id="formacion" name="formacion" class="form-control" required="required">
 															<option value="Ingeniero">Ingeniero</option>
 															<option value="Licenciado">Licenciado</option>
 															<option value="Magister">Magister</option>
@@ -730,8 +712,8 @@ $query = "  SELECT
 												<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="especialidad">Especialidad</label>
 
 												<div class="col-xs-12 col-sm-9">
-													<div class="clearfix">
-														<select class="input-medium" id="especialidad" name="especialidad">
+													<div class="clearfix col-sm-4">
+														<select class="form-control" id="especialidad" name="especialidad" required="required">
 															<option value="Ingeniero">Matematica</option>
 															<option value="Licenciado">Sistemas</option>
 															<option value="Magister">Informatica</option>
@@ -745,11 +727,10 @@ $query = "  SELECT
 											<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="materias_impartidas">Materias impartidas</label>
 											<div class="col-xs-12 col-sm-9">
 												<select id="especialidad" class="multiselect" multiple="">
-													<option name="materia1" value="Matematica 1">Matematica 1</option>
-													<option name="materia2" value="Ingles">Ingles</option>
-													<option name="materia3" value="Defensa integral">Defensa integral</option>
-													<option name="materia4" value="Analisis de sistemas">Analisis de sistemas</option>
-													<option name="materia5" value="Investigacion de operaciones">Investigacion de operaciones</option>
+												<option value="Ingeniero">Matematica</option>
+												<option value="Licenciado">Sistemas</option>
+												<option value="Magister">Informatica</option>
+												<option value="Doctor">Electrica</option>
 												</select>
 											</div>
 											</div>
@@ -766,8 +747,8 @@ $query = "  SELECT
 												<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="banco">Banco</label>
 
 												<div class="col-xs-12 col-sm-9">
-													<div class="clearfix">
-														<select class="input-medium" id="banco" name="banco">
+													<div class="clearfix col-sm-4">
+														<select class="form-control" id="banco" name="banco">
 															<option value="Banco de Venezuela">Banco de Venezuela</option>
 															<option value="Mercantil">Mercantil</option>
 															<option value="Banco del tesoro">Banco del tesoro</option>
@@ -883,6 +864,7 @@ $query = "  SELECT
 		<!--<script src="assets/js/jquery.maskedinput.min.js"></script>
 		<script src="assets/js/select2.min.js"></script>-->
 		<script src="assets/js/bootstrap-multiselect.min.js"></script>
+		<script src="assets/js/chosen.jquery.min.js"></script>
 
 		<!-- ace scripts -->
 		<script src="assets/js/ace-elements.min.js"></script>
@@ -890,7 +872,7 @@ $query = "  SELECT
 
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
-				////////////////// el multi select !! !
+				// Multiselect!! !
 				$('.multiselect').multiselect({
 				 enableFiltering: true,
 				 buttonClass: 'btn btn-white btn-primary',
@@ -904,8 +886,6 @@ $query = "  SELECT
 					liGroup: '<li class="multiselect-item group"><label class="multiselect-group"></label></li>'
 				 }
 				});
-
-
 				// wizard
 				$(document).ready(function () {
 
