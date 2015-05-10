@@ -21,22 +21,24 @@ $query = "  SELECT
         } 
         catch(PDOException $ex){ 
 		echo "<div class='panel-body'>
-                            <div class='alert alert-warning alert-dismissable'>
-                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
-								</div>" .$ex->getMessage();
+                <div class='alert alert-warning alert-dismissable'>
+                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                    Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+				</div>
+            </div>" .$ex->getMessage();
 		} 
         $row = $stmt->fetch();
    }
 }else{
 	header('Location: index.php?accion=log_error');
 	}
-    $query = "  SELECT 
-                ID,
-                cedula,
-                nombre,
-                apellido,
-                condicion
-            FROM profesores 
+    $query = "  SELECT  ID,
+                        cedula,
+                        nombre,
+                        apellido,
+                        condicion,
+                        telefono
+                FROM    profesores 
              "; 
         try{ 
             $stmt = $db->prepare($query); 
@@ -45,9 +47,11 @@ $query = "  SELECT
         } 
         catch(PDOException $ex){ 
         echo "<div class='panel-body'>
-                            <div class='alert alert-warning alert-dismissable'>
-                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
-                                </div>" .$ex->getMessage();
+                <div class='alert alert-warning alert-dismissable'>
+                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                    Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+                </div>
+            </div>" .$ex->getMessage();
         } 
         $rows = $stmt->fetchAll();
  ?>
@@ -58,7 +62,7 @@ $query = "  SELECT
         <meta charset="utf-8" />
         <title>Listar profesor - SRCP</title>
 
-        <meta name="description" content="overview &amp; stats" />
+        <meta name="description" content="Listar profesores" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
         <!-- bootstrap & fontawesome -->
@@ -111,12 +115,12 @@ $query = "  SELECT
                 <div class="navbar-header pull-left">
                     <a href="index.php" class="navbar-brand">
                         <small>
-                            <i class="fa fa-leaf"></i>
+                            <i class="fa fa-leaf "></i>
                             Sistema de control y registro de profesores.
                         </small>
                     </a>
                 </div>
-                <!--menu-->
+                <!--menu top-->
                                 <div class="navbar-buttons navbar-header pull-right" role="navigation">
                     <ul class="nav ace-nav">
                         <li class="light-blue">
@@ -131,7 +135,7 @@ $query = "  SELECT
 
                             <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                                 <li>
-                                    <a href="#">
+                                    <a href="configuracion.php">
                                         <i class="ace-icon fa fa-cog"></i>
                                         Configuracion
                                     </a>
@@ -156,19 +160,12 @@ $query = "  SELECT
                         </li>
                     </ul>
                 </div>
-            </div><!-- /.navbar-container -->
+            </div>
+            <!-- /.navbar-container Menu Top -->
         </div>
 
         <div class="main-container" id="main-container">
-            <script type="text/javascript">
-                try{ace.settings.check('main-container' , 'fixed')}catch(e){}
-            </script>
-
-            <div id="sidebar" class="sidebar                  responsive">
-                <script type="text/javascript">
-                    try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
-                </script>
-
+            <div id="sidebar" class="sidebar responsive">
                 <ul class="nav nav-list">
                     <li class="active">
                         <a href="index.php">
@@ -286,20 +283,12 @@ $query = "  SELECT
                 <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
                     <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
                 </div>
-
-                <script type="text/javascript">
-                    try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
-                </script>
             </div>
 
             <div class="main-content">
                 <div class="main-content-inner">
                     <div class="breadcrumbs" id="breadcrumbs">
-                        <script type="text/javascript">
-                            try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
-                        </script>
-
-                        <ul class="breadcrumb">
+                       <ul class="breadcrumb">
                             <li>
                                 <i class="ace-icon fa fa-home home-icon"></i>
                                 <a href="index.php">Inicio</a>
@@ -348,17 +337,12 @@ $query = "  SELECT
                                                                 <span class="lbl"></span>
                                                             </label>
                                                         </th>
-                                                        <th>ID</th>
                                                         <th>Cedula</th>
-                                                        <th class="hidden-480">Nombre</th>
-
-                                                        <th>
-                                                            <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
-                                                            Apellido
-                                                        </th>
-                                                        <th class="hidden-480">Condicion</th>
-
-                                                        <th></th>
+                                                        <th>Nombre</th>
+                                                        <th>Apellido</th>
+                                                        <th>Condicion</th>
+                                                        <th>Telefono</th>
+                                                        <th>Acciones</th>
                                                     </tr>
                                                 </thead>
 
@@ -366,28 +350,25 @@ $query = "  SELECT
                                                 <?php foreach ($rows as $row) {?>
                                                     <tr>
                                                         <td></td>
-                                                        <td><?php echo $row['ID']; ?></td>
                                                         <td><?php echo $row['cedula']; ?></td>
                                                         <td><?php echo $row['nombre']; ?></td>
                                                         <td><?php echo $row['apellido']; ?></td>
                                                         <td><?php echo $row['condicion'];?></td>
+                                                        <td><?php echo $row['telefono']?></td>
                                                         <td>
                                                             <div class="hidden-sm hidden-xs btn-group">
-                                                            <button class="btn btn-xs btn-success">
-                                                                <i class="ace-icon fa fa-check bigger-120"></i>
-                                                            </button>
+                                                            <a href="perfil.php?id=<?PHP echo $row['ID']?>">
+                                                            <button class="btn btn-xs btn-info" title="Perfil">
+                                                            <i class="ace-icon fa fa-user bigger-120"></i>
+                                                            </button></a>
+                                                            </div>
 
-                                                            <button class="btn btn-xs btn-info">
-                                                                <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                                            </button>
-
-                                                            <button class="btn btn-xs btn-danger">
-                                                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                                                            </button>
-
-                                                            <button class="btn btn-xs btn-warning">
-                                                                <i class="ace-icon fa fa-flag bigger-120"></i>
-                                                            </button>
+                                                            <div class="hidden-sm hidden-xs btn-group">
+                                                            <a href="perfil.php?id=<?PHP echo $row['ID']?>&queja=si">
+                                                            <button class="btn btn-xs btn-warning" title="Poner una queja" data-toggle="modal" data-target="#Quejas">
+                                                            <i class="ace-icon fa fa-flag bigger-120"></i>
+                                                            </button></a>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>
@@ -396,9 +377,6 @@ $query = "  SELECT
                                         </div>
                                     </div>
                                 </div><!-- PAGE CONTENT ENDS -->
-
-
-                    <!-- EXPERIMENTO XD -->
             </div>
             </div>
             </div></div>
@@ -694,5 +672,5 @@ $query = "  SELECT
             
             })
         </script>
-            </body>
+    </body>
 </html>
