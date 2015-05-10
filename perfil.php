@@ -10,28 +10,25 @@ if (isset($_COOKIE["id_usuario"]) && isset($_COOKIE["marca_aleatoria_usuario"]))
 if ($_GET['id'] == ""){
 	header("Location: index.php");
 	}
-
-// 
-$query = "  SELECT 
-                ID,
-                nombre,
-                apellido,
-                cedula,
-                direccion,
-                telefono,
-                correo,
-                genero,
-                condicion,
-                formacion,
-                especialidad,
-                estado,
-                banco,
-                nr_cuenta,
-                materia1,
-                materia2
-            FROM profesores
-            WHERE 
-                ID = :id 
+// query para seleccionar todos los datos del profesor.
+	$query = "  SELECT 	ID,
+		                nombre,
+		                apellido,
+		                cedula,
+		                direccion,
+		                telefono,
+		                correo,
+		                genero,
+		                condicion,
+		                formacion,
+		                especialidad,
+		                estado,
+		                banco,
+		                nr_cuenta,
+		                materia1,
+		                materia2
+            	FROM 	profesores
+          		WHERE 	ID = :id 
         "; 
         $query_params = array( 
             ':id' => $_GET['id'] 
@@ -43,9 +40,11 @@ $query = "  SELECT
         } 
         catch(PDOException $ex){ 
 		echo "<div class='panel-body'>
-                            <div class='alert alert-warning alert-dismissable'>
-                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
-								</div>" .$ex->getMessage();
+                <div class='alert alert-warning alert-dismissable'>
+            	    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+            	    Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+				</div>
+			 </div>" .$ex->getMessage();
 		} 
         $row = $stmt->fetch();
    }
@@ -103,11 +102,7 @@ $query = "  SELECT
 
 	<body class="no-skin">
 <div id="navbar" class="navbar navbar-default">
-			<script type="text/javascript">
-				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
-			</script>
-
-			<div class="navbar-container" id="navbar-container">
+	<div class="navbar-container" id="navbar-container">
 				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
 					<span class="sr-only">Toggle sidebar</span>
 
@@ -133,8 +128,7 @@ $query = "  SELECT
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
 								<img class="nav-user-photo" src="assets/avatars/user.jpg" alt="Foto de <?php echo $row['nombre']?>" />
 								<span class="user-info">
-									<small>Bienvenido,</small>
-									<?php echo $row['nombre']?>
+									Bienvenido, <?php echo $row['nombre']?>
 								</span>
 
 								<i class="ace-icon fa fa-caret-down"></i>
@@ -142,7 +136,7 @@ $query = "  SELECT
 
 							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 								<li>
-									<a href="#">
+									<a href="configuracion.php">
 										<i class="ace-icon fa fa-cog"></i>
 										Configuracion
 									</a>
@@ -171,15 +165,7 @@ $query = "  SELECT
 		</div>
 
 		<div class="main-container" id="main-container">
-			<script type="text/javascript">
-				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
-			</script>
-
-			<div id="sidebar" class="sidebar                  responsive">
-				<script type="text/javascript">
-					try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
-				</script>
-
+			<div id="sidebar" class="sidebar responsive">
 				<ul class="nav nav-list">
 					<li class="active">
 						<a href="index.php">
@@ -297,19 +283,11 @@ $query = "  SELECT
 				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
 					<i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
 				</div>
-
-				<script type="text/javascript">
-					try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
-				</script>
 			</div>
 
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs" id="breadcrumbs">
-						<script type="text/javascript">
-							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
-						</script>
-
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
@@ -921,6 +899,155 @@ $query = "  SELECT
 					$('[class*=select2]').remove();
 				});
 			});
+    $(window).load(function(){
+        $('#queja').modal('show');
+    });
+
 		</script>
+		<?php
+		//creamos una busqueda para las quejas
+	    $quejas = 'SELECT * FROM l_quejas';
+	    // Creamos la busqueda por nuestro metodo $db->query(La consulta anterior $sql)y asignamos los valores a $result
+	    $result = $db->query($quejas);
+	    // Extraemos los valores de  $result
+	    $rows = $result->fetchAll();
+	    // Como estan en un arreglo, sacamos cada uno desde $rows
+		if(isset($_GET['queja'])){
+		//chequeamos la accion en el GET.
+    switch ($_GET['queja']) {
+        case 'si':
+            echo "
+            <form name='enviar_queja' method='post' action='perfil.php?id=";
+            echo $row['ID'];
+            echo "' role='form'>
+            <div class='modal fade' id='queja' tabindex='-1' role='dialog' aria-labeledby='AlertaLabel' aria-hidden='false'>
+			<div class='modal-dialog'>
+                <div class='modal-content'>
+					<div class='modal-header'>
+						<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+						<h3>¡Agregar una queja!</h3>
+					</div>
+					<div class='modal-body'>
+						<p>Para agregar una queja simplemente selecciona de la lista la queja que quieras poner.</p>
+						<!--Nota: el autofocus solo sirve en Chrome :c -->
+						<select autofocus name='quejas' id='quejas' class='form-control' required='required'>";
+							foreach ($rows as $row){
+							echo "<option value='";
+							echo $row['queja'];
+							echo "'>";
+							echo $row['queja'];
+							echo "</option>";
+							}
+						echo "</select>
+						<p> Ahora puedes acceder al sistema, por medio del panel que aparecera al cerrar esta ventana.</p>
+					</div>
+					<div class='modal-footer'>
+					<button type='submit' id='enviar_queja' name='enviar_queja' class='btn btn-info'>¡Enviar!</button>
+					</div>
+                </div>
+            </div>
+        </div>
+        </form>";
+            break;
+        }} 
+        ?>
+        <?php
+//comienzo del registro de quejas.
+//Verificamos con isset si la variable enviar_queja fue enviada y no es NULL
+	if(isset($_POST['enviar_queja'])) 
+    {
+    	/**
+    	 * Las quejas se encuentran en l_quejas
+    	 * Así que como ya las habiamos mostrado
+    	 * solo debemos tomarlas y meterlas en la nueva
+    	 * tabla quejas con los datos del amonestado
+    	 * 
+    	 * TODO
+    	 * Seleccionar la cedula del ID ---- Listo!
+    	 * Agregar Cedula - Queja - Nivel a tabla quejas
+    	 * Actualizar la suma de las quejas al profesor.
+    	 */
+        /// hacemos un query para seleccionar la cedula
+        
+        $query = "SELECT 	*
+            	  FROM 		profesores
+            	  WHERE 	ID = :id;
+            	  ";
+        $query_params = array(
+            ':id' => $_GET['id']
+        );
+        try { 
+            $stmt = $db->prepare($query);
+            $resultado = $stmt->execute($query_params);
+        }
+        catch(PDOException $ex){
+		// Si tenemos problemas para ejecutar la consulta imprimimos el error
+			echo "<div class='panel-body'>
+                     <div class='alert alert-warning alert-dismissable'>
+                        <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                        Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+					</div>
+				  </div>" .$ex->getMessage();}
+		//si pasamos el error almacenamos la cedula de ese profesor en un arreglo.
+		$queja_row = $stmt->fetch();
+		$cedula = $queja_row['cedula'];
+		//almacenamos en la variable $cedula el resultado del indice del arreglo $queja_row en cedula
+
+		// Buscamos el nivel de la queja que se va a sumar.
+		$query = "SELECT 	*
+            	  FROM 		l_quejas
+            	  WHERE 	queja = :queja;
+            	  ";
+        $query_params = array(
+            ':queja' => $_POST['quejas']
+        );
+        try { 
+            $stmt = $db->prepare($query);
+            $resultado = $stmt->execute($query_params);
+        }
+        catch(PDOException $ex){
+		// Si tenemos problemas para ejecutar la consulta imprimimos el error
+			echo "<div class='panel-body'>
+                     <div class='alert alert-warning alert-dismissable'>
+                        <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                        Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+					</div>
+				  </div>" .$ex->getMessage();}
+		//si pasamos el error almacenamos la cedula de ese profesor en un arreglo.
+		$lista_queja = $stmt->fetch();
+		$nivel = $lista_queja['nivel'];
+		//almacenamos en la variable $nivel el resultado del indice del arreglo $lista_queja en cedula
+	 	
+	 	//Ahora vamos a agregar la queja en la tabla de quejas con los datos del profesor
+	 	$query = "INSERT INTO quejas (
+            	  			  cedula,
+            	  			  quejas,
+            	  			  nivel
+            	  	)
+            	  VALUES(	  :cedula,
+            	  			  :quejas,
+            	  			  :nivel
+            	  	)
+            	  ";
+        $query_params = array(
+        	':quejas' => $_POST['quejas'],
+            ':cedula' => $queja_row['cedula'],
+            ':nivel' => $nivel
+        );
+        try { 
+            $stmt = $db->prepare($query);
+            $resultado = $stmt->execute($query_params);
+        }
+        catch(PDOException $ex){
+		// Si tenemos problemas para ejecutar la consulta imprimimos el error
+			echo "<div class='panel-body'>
+                     <div class='alert alert-warning alert-dismissable'>
+                        <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                        Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+					</div>
+				  </div>" .$ex->getMessage();}
+
+    } //fin del isset de quejas!
+        ?>
 	</body>
 </html>

@@ -32,14 +32,13 @@ $query = "  SELECT
 }else{
 	header('Location: index.php?accion=log_error');
 	}
-    $query = "  SELECT 
-                ID,
-                cedula,
-                nombre,
-                apellido,
-                condicion,
-                telefono
-                FROM profesores 
+    $query = "  SELECT  ID,
+                        cedula,
+                        nombre,
+                        apellido,
+                        condicion,
+                        telefono
+                FROM    profesores 
              "; 
         try{ 
             $stmt = $db->prepare($query); 
@@ -116,12 +115,12 @@ $query = "  SELECT
                 <div class="navbar-header pull-left">
                     <a href="index.php" class="navbar-brand">
                         <small>
-                            <i class="fa fa-leaf"></i>
+                            <i class="fa fa-leaf "></i>
                             Sistema de control y registro de profesores.
                         </small>
                     </a>
                 </div>
-                <!--menu-->
+                <!--menu top-->
                                 <div class="navbar-buttons navbar-header pull-right" role="navigation">
                     <ul class="nav ace-nav">
                         <li class="light-blue">
@@ -136,7 +135,7 @@ $query = "  SELECT
 
                             <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                                 <li>
-                                    <a href="#">
+                                    <a href="configuracion.php">
                                         <i class="ace-icon fa fa-cog"></i>
                                         Configuracion
                                     </a>
@@ -161,7 +160,8 @@ $query = "  SELECT
                         </li>
                     </ul>
                 </div>
-            </div><!-- /.navbar-container -->
+            </div>
+            <!-- /.navbar-container Menu Top -->
         </div>
 
         <div class="main-container" id="main-container">
@@ -342,7 +342,7 @@ $query = "  SELECT
                                                         <th>Apellido</th>
                                                         <th>Condicion</th>
                                                         <th>Telefono</th>
-                                                        <th></th>
+                                                        <th>Acciones</th>
                                                     </tr>
                                                 </thead>
 
@@ -358,9 +358,17 @@ $query = "  SELECT
                                                         <td>
                                                             <div class="hidden-sm hidden-xs btn-group">
                                                             <a href="perfil.php?id=<?PHP echo $row['ID']?>">
-                                                            <button class="btn btn-xs btn-sucess" title="Perfil">
+                                                            <button class="btn btn-xs btn-info" title="Perfil">
                                                             <i class="ace-icon fa fa-user bigger-120"></i>
                                                             </button></a>
+                                                            </div>
+
+                                                            <div class="hidden-sm hidden-xs btn-group">
+                                                            <a href="perfil.php?id=<?PHP echo $row['ID']?>&queja=si">
+                                                            <button class="btn btn-xs btn-warning" title="Poner una queja" data-toggle="modal" data-target="#Quejas">
+                                                            <i class="ace-icon fa fa-flag bigger-120"></i>
+                                                            </button></a>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>
