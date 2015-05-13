@@ -8,8 +8,9 @@ El sistema esta hecho en PHP MySQL. Utilizando PDO para realizar las conexiones 
 * Lista de docentes
 * Perfil del docente (generico)
 * Reporte de lista de profesores (Ver listar_profesor.php)
-* 
+
 # TO-DO
+
 * Mudar los errores desde "die" a un modal
 * Modificar los mensajes de error para que el .$ex->getMessage() quede dentro del modal de error
 * Agregar constancias
