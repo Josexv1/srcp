@@ -1,5 +1,5 @@
 # SRCP
-Sistema de Registro y control de profesores en PHP MySQL y PDO
+Inicialmente era un sistema de control y registro de profesores, pero actualmente se modifico para ser un sistema integro de control de una institucion educativa, utilizando las ultimas tecnologias web, y metodos seguros de acceso al sistema, por medio de PDO, Contraseñas encriptadas en SHA512 y otras funciones.
 
 El sistema esta hecho en PHP MySQL. Utilizando PDO para realizar las conexiones a la base de datos.
 
@@ -16,6 +16,7 @@ El sistema esta hecho en PHP MySQL. Utilizando PDO para realizar las conexiones 
 
 # TO-DO
 
+* Actualizar el README.MD
 * Cambiar metodo de encriptamiento de las password con nuevas funciones de php
 * Mudar los errores desde "die" a un modal
 * Modificar los mensajes de error para que el .$ex->getMessage() quede dentro del modal de error
