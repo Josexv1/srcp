@@ -110,6 +110,7 @@ $query = "  SELECT  ID,
   		setcookie("marca_aleatoria_usuario", $numero_aleatorio, time()+(60*60));
   	}
 	// FIN DE LA COOKIE.
+
 	header("Location: index.php"); 
     } 
     else{ 
@@ -272,7 +273,7 @@ $query = "  SELECT  ID,
 															<input onkeyup="this.value=this.value.toUpperCase()" type="email" name="correo" id="correo" required class="form-control" placeholder="Correo electronico" />
 															<i class="ace-icon fa fa-user"></i>
 														</span>
-														<small class="errorText"><?php echo ($_POST["correo"] == "") ? "Este campo es requerido" : ""; ?></small>
+														<small class="errorText"></small>
 													</label>
 
 													<label class="block clearfix">
