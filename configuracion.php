@@ -130,7 +130,7 @@ $query = "  SELECT
                                 <li>
                                     <a href="configuracion.php">
                                         <i class="ace-icon fa fa-cog"></i>
-                                        Configuracion
+                                        Configuración
                                     </a>
                                 </li>
 
@@ -146,7 +146,7 @@ $query = "  SELECT
                                 <li>
                                     <a href="salir.php">
                                         <i class="ace-icon fa fa-power-off"></i>
-                                        Cerrar sesion
+                                        Cerrar sesión
                                     </a>
                                 </li>
                             </ul>
@@ -286,7 +286,7 @@ $query = "  SELECT
                                 <i class="ace-icon fa fa-home home-icon"></i>
                                 <a href="#">Sistema</a>
                             </li>
-                            <li class="active">Configuracion</li>
+                            <li class="active">Configuración</li>
                         </ul><!-- /.breadcrumb -->
 
                         <div class="nav-search" id="nav-search">
@@ -303,7 +303,7 @@ $query = "  SELECT
                                 Sistema
                                 <small>
                                     <i class="ace-icon fa fa-angle-double-right"></i>
-                                    Configuracion del sistema.
+                                    Configuración del sistema.
                                 </small>
                             </h1>
                         </div><!-- /.page-header -->
@@ -313,7 +313,7 @@ $query = "  SELECT
                             <div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
 
-                                Aquí iran las configuraciones como: Agregar, eliminar, carrera, administrador, semestre y otros :)))
+                                Aquí irán las configuraciones como: Agregar, eliminar, carrera, administrador, semestre y otros :)))
 
                 <!-- PAGE CONTENT ENDS -->
                     </div><!-- /.col -->

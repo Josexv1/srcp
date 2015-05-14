@@ -54,9 +54,9 @@ $query = "  SELECT
             $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
         }
-        catch(PDOException $ex){ die("Fallamos al hacer la busqueda: " . $ex->getMessage()); }
+        catch(PDOException $ex){ die("Fallamos al hacer la búsqueda: " . $ex->getMessage()); }
         $row = $stmt->fetch();
-        if($row){ die("La seccion ya existe!");  }
+        if($row){ die("La sección ya existe!");  }
         
         /// Si todo pasa enviamos los datos a la base de datos mediante PDO para evitar Inyecciones SQL
         $query = "
@@ -96,7 +96,8 @@ $query = "  SELECT
         case 'error':
             echo "<div class='panel-body'>
                             <div class='alert alert-success alert-dismissable'>
-                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Hay varios errores en tu registro. Si necesitas ayuda puedes hacer click al boton de Ayuda en el fondo de la página.
+                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                Hay varios errores en tu registro. Si necesitas ayuda puedes hacer clic al botón de Ayuda en el fondo de la página.
 								</div>";
             break;
     }
@@ -108,7 +109,7 @@ $query = "  SELECT
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>Panel principal - SRCP</title>
+		<title>Registro de sección - SRCP</title>
 
 		<meta name="description" content="overview &amp; stats" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -183,7 +184,7 @@ $query = "  SELECT
 								<li>
 									<a href="configuracion.php">
 										<i class="ace-icon fa fa-cog"></i>
-										Configuracion
+										Configuración
 									</a>
 								</li>
 
@@ -199,7 +200,7 @@ $query = "  SELECT
 								<li>
 									<a href="salir.php">
 										<i class="ace-icon fa fa-power-off"></i>
-										Cerrar sesion
+										Cerrar sesión
 									</a>
 								</li>
 							</ul>

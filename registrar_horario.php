@@ -120,7 +120,7 @@ $query = "  SELECT
                                 <li>
                                     <a href="configuracion.php">
                                         <i class="ace-icon fa fa-cog"></i>
-                                        Configuracion
+                                        Configuración
                                     </a>
                                 </li>
 
@@ -136,7 +136,7 @@ $query = "  SELECT
                                 <li>
                                     <a href="salir.php">
                                         <i class="ace-icon fa fa-power-off"></i>
-                                        Cerrar sesion
+                                        Cerrar sesión
                                     </a>
                                 </li>
                             </ul>

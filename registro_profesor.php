@@ -70,7 +70,7 @@ $query = "SELECT nombre,
         echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                Error: Coloque su direccion.</div>
+                Error: Coloque su dirección.</div>
 			</div>";
 		}
         if(empty($_POST['telefono']))
@@ -78,7 +78,7 @@ $query = "SELECT nombre,
         echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                Error: Coloque su telefono.</div>
+                Error: Coloque su teléfono.</div>
 			</div>";
 		}
 		if(empty($_POST['correo']))
@@ -118,7 +118,7 @@ $query = "SELECT nombre,
         	echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                Error: La cedula ya existe.</div>
+                Error: La cédula ya existe.</div>
 			</div>";
 		}
         $query = "SELECT 1
@@ -142,7 +142,12 @@ $query = "SELECT nombre,
                 Error: El correo ya esta en uso.</div>
 			</div>";
 		}
-
+/*
+ * Antes de introducir calculamos la edad del profesor
+ * 
+ */
+	$fecha = time() - strtotime($_POST['nacimiento']);
+	$edad = floor((($fecha / 3600) / 24) / 360);
 
         /// Si todo pasa enviamos los datos a la base de datos mediante PDO para evitar Inyecciones SQL
         $query ="	INSERT INTO profesores (
@@ -160,7 +165,10 @@ $query = "SELECT nombre,
 				                banco,
 				                nr_cuenta,
 				                sueldo,
-				                seguro_social
+				                seguro_social,
+				                edad,
+				                nacimiento,
+				                f_contratado
 				    ) VALUES (
 				                :nombre,
 				                :apellido,
@@ -176,7 +184,10 @@ $query = "SELECT nombre,
 				                :banco,
 				                :nr_cuenta,
 				                :sueldo,
-				                :seguro
+				                :seguro,
+				                :edad,
+				                :nacimiento,
+				                :f_contratado
 				            )
         		";
             $query_params = array(
@@ -194,8 +205,11 @@ $query = "SELECT nombre,
             ':banco' => $_POST['banco'],
             ':nr_cuenta' => $_POST['nr_cuenta'],
             ':sueldo' => $_POST['sueldo'],
-            ':seguro' => $_POST['seguro']
-        );
+            ':seguro' => $_POST['seguro'],
+            ':edad' => $edad,
+            ':nacimiento' => $_POST['nacimiento'],
+            ':f_contratado' => date('Y-m-d')
+            );
         try { 
             $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
@@ -222,7 +236,7 @@ $query = "SELECT nombre,
                     <div class='alert alert-success alert-dismissable'>
                       <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                       Hay varios errores en tu registro. 
-                      Si necesitas ayuda puedes hacer click al boton de Ayuda en el fondo de la página.
+                      Si necesitas ayuda puedes hacer clic al botón de Ayuda en el fondo de la página.
 					</div>
 				</div>";
             break;
@@ -269,6 +283,7 @@ $query = "  SELECT nombre,
 
 		<!-- page specific plugin styles -->
 		<link rel="stylesheet" href="assets/css/bootstrap-multiselect.min.css" />
+		<link rel="stylesheet" href="assets/css/datepicker.min.css" />
 		<style type="text/css">
 		/*
 		Inicio del wizard del registro de profesores.
@@ -384,7 +399,7 @@ $query = "  SELECT nombre,
 								<li>
 									<a href="configuracion.php">
 										<i class="ace-icon fa fa-cog"></i>
-										Configuracion
+										Configuración
 									</a>
 								</li>
 
@@ -400,7 +415,7 @@ $query = "  SELECT nombre,
 								<li>
 									<a href="salir.php">
 										<i class="ace-icon fa fa-power-off"></i>
-										Cerrar sesion
+										Cerrar sesión
 									</a>
 								</li>
 							</ul>
@@ -589,11 +604,11 @@ $query = "  SELECT nombre,
             <div class="col-md-12">
             </br>
             	<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="cedula">Cedula:</label>
+					<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="cedula">Cédula:</label>
 
 					<div class="col-xs-12 col-sm-9">
 						<div class="clearfix">
-							<input type="text" name="cedula" id="cedula" class="col-xs-12 col-sm-4 input-large" />
+							<input type="text" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" name="cedula" id="cedula" class="col-xs-12 col-sm-4 input-large" required="required" />
 						</div>
 					</div>
 				</div>
@@ -602,7 +617,7 @@ $query = "  SELECT nombre,
 
 					<div class="col-xs-12 col-sm-9">
 						<div class="clearfix">
-							<input type="text" name="nombre" id="nombre" class="col-xs-12 col-sm-6 input-large" />
+							<input type="text" name="nombre" id="nombre" class="col-xs-12 col-sm-6 input-large" required="required"/>
 						</div>
 					</div>
 				</div>
@@ -612,26 +627,26 @@ $query = "  SELECT nombre,
 
 					<div class="col-xs-12 col-sm-9">
 						<div class="clearfix">
-							<input type="text" name="apellido" id="apellido" class="col-xs-12 col-sm-4 input-large" />
+							<input type="text" name="apellido" id="apellido" class="col-xs-12 col-sm-4 input-large" required="required"/>
 						</div>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="direccion">Direccion:</label>
+					<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="direccion">Dirección:</label>
 
 					<div class="col-xs-12 col-sm-9">
 						<div class="clearfix">
-							<input type="text" id="direccion" name="direccion" class="col-xs-12 col-sm-5 input-large" />
+							<input type="text" id="direccion" name="direccion" class="col-xs-12 col-sm-5 input-large" required="required"/>
 						</div>
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="telefono">Numero de Telefono:</label>
+					<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="telefono" >Numero de Teléfono:</label>
 
 					<div class="col-xs-12 col-sm-9">
 						<div class="input-group">
-							<input type="tel" id="telefono" name="telefono" class="col-xs-12 col-sm-5 input-large" />
+							<input onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" type="tel" id="telefono" name="telefono" class="col-xs-12 col-sm-5 input-large" required="required"/>
 					</div>
 				</div>
 
@@ -641,7 +656,7 @@ $query = "  SELECT nombre,
 					<div class="col-xs-12 col-sm-9">
 						<div class="clearfix">
 						<div class="input-group">
-							<input type="email" id="correo" name="correo" class="col-xs-12 col-sm-8 input-large" />
+							<input type="email" id="correo" name="correo" class="col-xs-12 col-sm-8 input-large" required="required"/>
 						</div>
 					</div>
 				</div>
@@ -666,25 +681,38 @@ $query = "  SELECT nombre,
 					<label class="col-sm-3 control-label no-padding-right">Estado</label>
 						<div class="col-sm-9">
 							<div class="pos-rel">
-								<input id="estado" name="estado" class="typeahead scrollable" type="text" placeholder="Estados de Venezuela" />
+								<input id="estado" name="estado" class="typeahead scrollable" type="text" placeholder="Estados de Venezuela" required="required"/>
 							</div>
 						</div>
 					</div>
 				<div class="form-group">
-					<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="condicion">Condicion</label>
+					<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="condicion">Condición</label>
 
 					<div class="col-xs-12 col-sm-9">
 						<div class="clearfix">
-							<input list="condicion" name="condicion" required="required" class="col-xs-12 col-sm-5 input-large">
+							<input list="condicion" name="condicion" required="required" class="col-xs-12 col-sm-5 input-large" autocomplete="off">
 						    <datalist id="condicion">
-						        <option value="Tiempo completo">
-						        <option value="Tiempo parcial">
-						        <option value="Pago por hora">
-						        <option value="Otro">
+						        <option value="Tiempo completo"></option>
+						        <option value="Tiempo parcial"></option>
+						        <option value="Pago por hora"></option>
+						        <option value="Otro"></option>
 						    </datalist>
 						</div>
 					</div>
-				</div> <!-- Fin del Form Group-->
+				</div>
+					<div class="form-group">
+						<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="nacimiento">Fecha de nacimiento</label>
+						<div class="col-xs-12 col-sm-9">
+						<div class="clearfix">
+							<div class="input-group">
+								<span class="block input-icon input-icon-right">
+									<input class="col-xs-12 col-sm-6 input-large date-picker" id="id-date-picker-1" name="nacimiento" type="text" data-date-format="yyyy-mm-dd" required="required"/>
+										<i class="ace-icon fa fa-calendar"></i>
+								</span>
+							</div>
+							</div>
+						</div>
+					</div><!-- Fin del Form Group-->
 			<button class="btn btn-primary nextBtn btn-lg pull-right" type="button" >Siguiente</button>
             </div>
         </div>
@@ -694,7 +722,7 @@ $query = "  SELECT nombre,
         <div class="col-xs-12">
             <div class="col-md-12">												                
 								<div class="form-group">
-								<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="formacion">Titulacion</label>
+								<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="formacion">Titulación</label>
 
 												<div class="col-xs-12 col-sm-9">
 													<div class="clearfix col-sm-4">
@@ -714,10 +742,10 @@ $query = "  SELECT nombre,
 												<div class="col-xs-12 col-sm-9">
 													<div class="clearfix col-sm-4">
 														<select class="form-control" id="especialidad" name="especialidad" required="required">
-															<option value="Ingeniero">Matematica</option>
+															<option value="Ingeniero">Matemática</option>
 															<option value="Licenciado">Sistemas</option>
-															<option value="Magister">Informatica</option>
-															<option value="Doctor">Electrica</option>
+															<option value="Magister">Informática</option>
+															<option value="Doctor">Eléctrica</option>
 														</select>
 													</div>
 												</div>
@@ -727,10 +755,10 @@ $query = "  SELECT nombre,
 											<label class="control-label col-xs-12 col-sm-3 no-padding-right" for="materias_impartidas">Materias impartidas</label>
 											<div class="col-xs-12 col-sm-9">
 												<select id="especialidad" class="multiselect" multiple="">
-												<option value="Ingeniero">Matematica</option>
+												<option value="Ingeniero">Matemática</option>
 												<option value="Licenciado">Sistemas</option>
-												<option value="Magister">Informatica</option>
-												<option value="Doctor">Electrica</option>
+												<option value="Magister">Informática</option>
+												<option value="Doctor">Eléctrica</option>
 												</select>
 											</div>
 											</div>
@@ -748,7 +776,7 @@ $query = "  SELECT nombre,
 
 												<div class="col-xs-12 col-sm-9">
 													<div class="clearfix col-sm-4">
-														<select class="form-control" id="banco" name="banco">
+														<select class="form-control" id="banco" name="banco" required="required">
 															<option value="Banco de Venezuela">Banco de Venezuela</option>
 															<option value="Mercantil">Mercantil</option>
 															<option value="Banco del tesoro">Banco del tesoro</option>
@@ -762,7 +790,7 @@ $query = "  SELECT nombre,
 
 												<div class="col-xs-12 col-sm-9">
 													<div class="clearfix">
-														<input type="text" name="nr_cuenta" id="nr_cuenta" class="col-xs-12 col-sm-4" />
+														<input type="text" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" name="nr_cuenta" id="nr_cuenta" class="col-xs-12 col-sm-4" required="required"/>
 													</div>
 												</div>
 											</div>
@@ -771,7 +799,7 @@ $query = "  SELECT nombre,
 
 												<div class="col-xs-12 col-sm-9">
 													<div class="clearfix">
-														<input type="text" name="seguro" id="seguro" class="col-xs-12 col-sm-4" />
+														<input type="text" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" name="seguro" id="seguro" class="col-xs-12 col-sm-4" required="required"/>
 													</div>
 												</div>
 											</div>
@@ -780,7 +808,7 @@ $query = "  SELECT nombre,
 
 												<div class="col-xs-12 col-sm-9">
 													<div class="clearfix">
-														<input type="text" name="sueldo" id="sueldo" class="col-xs-12 col-sm-4" />
+														<input type="text" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" name="sueldo" id="sueldo" class="col-xs-12 col-sm-4" required="required"/>
 													</div>
 												</div>
 											</div>
@@ -861,11 +889,9 @@ $query = "  SELECT nombre,
 		<script src="assets/js/typeahead.jquery.min.js"></script>
 		<!--<script src="assets/js/additional-methods.min.js"></script>-->
 		<script src="assets/js/bootbox.min.js"></script>
-		<!--<script src="assets/js/jquery.maskedinput.min.js"></script>
-		<script src="assets/js/select2.min.js"></script>-->
+		<script src="assets/js/jquery.maskedinput.min.js"></script>
 		<script src="assets/js/bootstrap-multiselect.min.js"></script>
-		<script src="assets/js/chosen.jquery.min.js"></script>
-
+		<script src="assets/js/bootstrap-datepicker.min.js"></script>
 		<!-- ace scripts -->
 		<script src="assets/js/ace-elements.min.js"></script>
 		<script src="assets/js/ace.min.js"></script>
@@ -966,6 +992,35 @@ $query = "  SELECT nombre,
 					displayKey: 'value',
 					source: substringMatcher(ace.vars['VE_STATES'])
 				 });
+
+
+				 //datepicker plugin
+				//link
+				$('.date-picker').datepicker({
+					autoclose: true,
+					todayHighlight: true
+				})
+				//Mostrar el datepicker al hacer click en el icono
+				.next().on(ace.click_event, function(){
+					$(this).prev().focus();
+				});
+			
+				//o cambiarlo a un range-picker
+				$('.input-daterange').datepicker({autoclose:true});
+			
+			
+				//to translate the daterange picker, please copy the "examples/daterange-fr.js" contents here before initialization
+				$('input[name=date-range-picker]').daterangepicker({
+					'applyClass' : 'btn-sm btn-success',
+					'cancelClass' : 'btn-sm btn-default',
+					locale: {
+						applyLabel: 'Apply',
+						cancelLabel: 'Cancel',
+					}
+				})
+				.prev().on(ace.click_event, function(){
+					$(this).next().focus();
+				});
 		</script>
 	</body>
 </html>

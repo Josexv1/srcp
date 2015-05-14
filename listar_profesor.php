@@ -137,7 +137,7 @@ $query = "  SELECT
                                 <li>
                                     <a href="configuracion.php">
                                         <i class="ace-icon fa fa-cog"></i>
-                                        Configuracion
+                                        Configuración
                                     </a>
                                 </li>
 
@@ -153,7 +153,7 @@ $query = "  SELECT
                                 <li>
                                     <a href="salir.php">
                                         <i class="ace-icon fa fa-power-off"></i>
-                                        Cerrar sesion
+                                        Cerrar sesión
                                     </a>
                                 </li>
                             </ul>
@@ -337,11 +337,11 @@ $query = "  SELECT
                                                                 <span class="lbl"></span>
                                                             </label>
                                                         </th>
-                                                        <th>Cedula</th>
+                                                        <th>Cédula</th>
                                                         <th>Nombre</th>
                                                         <th>Apellido</th>
-                                                        <th>Condicion</th>
-                                                        <th>Telefono</th>
+                                                        <th>Condición</th>
+                                                        <th>Teléfono</th>
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
@@ -513,7 +513,7 @@ $query = "  SELECT
                     "aButtons": [
                         {
                             "sExtends": "copy",
-                            "sToolTip": "Copiar al portapapeles",
+                            "sToolTip": "Copiar al porta papeles",
                             "sButtonClass": "btn btn-white btn-primary btn-bold",
                             "sButtonText": "<i class='fa fa-copy bigger-110 pink'></i>",
                             "fnComplete": function() {
@@ -546,8 +546,8 @@ $query = "  SELECT
                             
                             "sMessage": "<div class='navbar navbar-default'><div class='navbar-header pull-left'><a class='navbar-brand' href='#'><small>Listado de profesores</small></a></div></div>",
                             
-                            "sInfo": "<h3 class='no-margin-top'>Vista de impresion</h3>\
-                                      <p>Por favor, utilize la funcion de imprimir del navegador para imprimir este documento, Normalmente es CTRL+P\
+                            "sInfo": "<h3 class='no-margin-top'>Vista de impresión</h3>\
+                                      <p>Por favor, utilice la función de imprimir del navegador para imprimir este documento, Normalmente es CTRL+P\
                                       <br />Presione <b>escape</b> cuando termine, para regresar</p>",
                         }
                     ]

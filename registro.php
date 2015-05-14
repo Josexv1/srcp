@@ -136,9 +136,14 @@ if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digi
         ";
           
         // Hacemos un salt para la seña y la encriptamos a numeros aleatorios en sha256 por seguridad.
-        $salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
-        $password = hash('sha256', $_POST['password'] . $salt);
-        for($round = 0; $round < 65536; $round++){ $password = hash('sha256', $password . $salt); }
+        // Genero una sal aleatorea. En este caso uso mcrypt_create_iv y su
+        // resultado lo traduzco a algo un poco mas "legible".
+        $salt = str_replace('=', '.', base64_encode(mcrypt_create_iv(20)));
+        $password = hash('sha512', $_POST['password'] . $salt);
+        //  Incluimos unas 65536 rondas para el hash que queremos mostrar, asi el proceso es lento y hacemos costoso el bruteforce
+        for($round = 0; $round < 65536; $round++){
+         $password = hash('sha512', $password . $salt);
+          }
         $query_params = array(
             ':nombre' => $_POST['nombre'],
 			':apellido' => $_POST['apellido'],
@@ -236,7 +241,7 @@ if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digi
           <hr class="colorgraph">
     <div class="form-group">
     <div class="input-group">
-    <input type="text" name="nombre" class="form-control input-lg" placeholder="Nombre" id="nombre" required/><span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+    <input type="text" name="nombre" class="form-control input-lg" placeholder="Nombre" id="nombre" onkeyup="this.value=this.value.toUpperCase()" required/><span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
     </div></div>
     <div class="form-group">
     <div class="input-group">
@@ -244,7 +249,7 @@ if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digi
     </div></div>
     <div class="form-group">
     <div class="input-group" data-validate="length" data-length="8">
-    <input class="form-control input-lg" type="text" name="cedula" placeholder="Cedula" id="cedula" required/><span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
+    <input class="form-control input-lg" type="text" name="cedula" placeholder="Cédula" id="cedula" required/><span class="input-group-addon danger"><span class="glyphicon glyphicon-remove"></span></span>
     </div></div>
     <div class="form-group">
     <div class="input-group" data-validate="email">

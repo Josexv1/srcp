@@ -113,7 +113,7 @@ $query = "  SELECT
 								<li>
 									<a href="configuracion.php">
 										<i class="ace-icon fa fa-cog"></i>
-										Configuracion
+										Configuración
 									</a>
 								</li>
 
@@ -129,7 +129,7 @@ $query = "  SELECT
 								<li>
 									<a href="salir.php">
 										<i class="ace-icon fa fa-power-off"></i>
-										Cerrar sesion
+										Cerrar sesión
 									</a>
 								</li>
 							</ul>
@@ -360,7 +360,7 @@ $query = "  SELECT
 
 													<div class="panel-collapse collapse" id="faq-1-1">
 														<div class="panel-body">
-														Esta programado en PHP, con tecnologia HTML5, CSS3, FontAwesome, Bootstrap, Fuentes de Google, Glyphcons, Ace, Fuelux UI, JQuery, Y otros componentes de desarroladores.	
+														Esta programado en PHP, con tecnología HTML5, CSS3, FontAwesome, Bootstrap, Fuentes de Google, Glyphcons, Ace, Fuelux UI, JQuery, Y otros componentes de desarrolladores.	
 														</div>
 													</div>
 												</div>
@@ -371,7 +371,7 @@ $query = "  SELECT
 															<i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
 
 															<i class="ace-icon fa fa-sort-amount-desc"></i>
-															&nbsp; ¿Para que sirve las tecnologias utlizadas?
+															&nbsp; ¿Para que sirve las tecnologías utilizadas?
 														</a>
 													</div>
 
@@ -403,7 +403,7 @@ $query = "  SELECT
 
 																	<div class="panel-collapse collapse" id="faq-list-1-sub-2">
 																		<div class="panel-body">
-																		PHP es un lenguaje de programacion en el cual se plasma la logica de los sistemas basados en la web.
+																		PHP es un lenguaje de programación en el cual se plasma la logica de los sistemas basados en la web.
 																		</div>
 																	</div>
 																</div>
@@ -418,7 +418,7 @@ $query = "  SELECT
 
 																	<div class="panel-collapse collapse" id="faq-list-1-sub-3">
 																		<div class="panel-body">
-																		Javascript es un lenguaje de programacion de cliente, en el cual se puede crear todo tipo de interaccion con el cliente.
+																		Javascript es un lenguaje de programación de cliente, en el cual se puede crear todo tipo de interacción con el cliente.
 																		</div>
 																	</div>
 																</div>
@@ -456,7 +456,7 @@ $query = "  SELECT
 
 													<div class="panel-collapse collapse" id="faq-1-4">
 														<div class="panel-body">
-														Solo deberas abrir los archivos con un editor de texto y modificarlo a tu gusto. Aunque deberas tener conocimiento sobre las tecnologias utilizadas.
+														Solo deberás abrir los archivos con un editor de texto y modificarlo a tu gusto. Aunque deberás tener conocimiento sobre las tecnologías utilizadas.
 														</div>
 													</div>
 												</div>
@@ -499,7 +499,7 @@ $query = "  SELECT
 
 													<div class="panel-collapse collapse" id="faq-2-1">
 														<div class="panel-body">
-														Si, por seguridad solamente se puede crear cuentas por el administrador, si desea una, debera solicitarla a su administrador de sistemas.
+														Si, por seguridad solamente se puede crear cuentas por el administrador, si desea una, deberá solicitarla a su administrador de sistemas.
 														</div>
 													</div>
 												</div>
@@ -529,7 +529,7 @@ $query = "  SELECT
 
 													<div class="panel-collapse collapse" id="faq-2-3">
 														<div class="panel-body">
-														Desde el panel de control del sistema, al lado de su foto en la parte superior derecha, abre el menu y vaya a configuracion, en la nueva ventana podra cambiar los datos de su cuenta de administrador
+														Desde el panel de control del sistema, al lado de su foto en la parte superior derecha, abre el menú y vaya a configuración, en la nueva ventana podrá cambiar los datos de su cuenta de administrador
 														</div>
 													</div>
 												</div>

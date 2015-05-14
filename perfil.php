@@ -11,22 +11,7 @@ if ($_GET['id'] == ""){
 	header("Location: index.php");
 	}
 // query para seleccionar todos los datos del profesor.
-	$query = "  SELECT 	ID,
-		                nombre,
-		                apellido,
-		                cedula,
-		                direccion,
-		                telefono,
-		                correo,
-		                genero,
-		                condicion,
-		                formacion,
-		                especialidad,
-		                estado,
-		                banco,
-		                nr_cuenta,
-		                materia1,
-		                materia2
+	$query = "  SELECT 	*
             	FROM 	profesores
           		WHERE 	ID = :id 
         "; 
@@ -59,7 +44,7 @@ if ($_GET['id'] == ""){
 		<meta charset="utf-8" />
 		<title>Perfil de profesores</title>
 
-		<meta name="description" content="3 styles with inline editable feature" />
+		<meta name="description" content="Perfil de profesores" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
 		<!-- bootstrap & fontawesome -->
@@ -138,7 +123,7 @@ if ($_GET['id'] == ""){
 								<li>
 									<a href="configuracion.php">
 										<i class="ace-icon fa fa-cog"></i>
-										Configuracion
+										Configuración
 									</a>
 								</li>
 
@@ -154,7 +139,7 @@ if ($_GET['id'] == ""){
 								<li>
 									<a href="salir.php">
 										<i class="ace-icon fa fa-power-off"></i>
-										Cerrar sesion
+										Cerrar sesión
 									</a>
 								</li>
 							</ul>
@@ -327,10 +312,14 @@ if ($_GET['id'] == ""){
 										</button>
 
 										<i class="ace-icon fa fa-umbrella bigger-120 blue"></i>
-										Haga click en algun campo para editarlo ...
+										Haga clic en algún campo para editarlo ...
 									</div>
 								</div>
-
+								<!-- <div class="clearfix">
+									<div>
+										<button type="button" data-toggle="modal" data-target="#queja" class="btn btn-default">button</button>
+									</div>
+								</div> -->
 								<div class="hr dotted"></div>
 
 								<div>
@@ -338,7 +327,7 @@ if ($_GET['id'] == ""){
 										<div class="col-xs-12 col-sm-3 center">
 											<div>
 												<span class="profile-picture">
-													<img id="avatar" class="editable img-responsive" alt="Alex's Avatar" src="assets/avatars/profile-pic.jpg" />
+													<img id="avatar" class="editable img-responsive" alt="Alex's Avatar" src="assets/avatars/avatar2.png" />
 												</span>
 
 												<div class="space-4"></div>
@@ -364,13 +353,16 @@ if ($_GET['id'] == ""){
 
 													<a href="#" class="btn btn-link">
 														<i class="ace-icon fa fa-envelope bigger-120 pink"></i>
-														Enviar un correo electronico
+														Enviar un correo electrónico
 													</a>
 
 													<a href="#" class="btn btn-link">
 														<i class="ace-icon fa fa-globe bigger-125 blue"></i>
 														Sitio web
 													</a>
+													<div>
+														
+													</div>
 												</div>
 
 												<div class="space-6"></div>
@@ -395,10 +387,17 @@ if ($_GET['id'] == ""){
 										<div class="space-12"></div>
 											<div class="profile-user-info profile-user-info-striped">
 												<div class="profile-info-row">
+													<div class="profile-info-name"> Cédula </div>
+
+													<div class="profile-info-value">
+														<span class="editable" id="cedula" name="cedula"><?php echo $row['cedula']; ?></span>
+													</div>
+												</div>
+												<div class="profile-info-row">
 													<div class="profile-info-name"> Nombre </div>
 
 													<div class="profile-info-value">
-														<span class="editable" id="nombre"><?php echo $row['nombre']; ?></span>
+														<span class="editable" id="nombre" name="nombre"><?php echo $row['nombre']; ?></span>
 													</div>
 												</div>
 
@@ -409,19 +408,26 @@ if ($_GET['id'] == ""){
 														<span class="editable" id="apellido"><?php echo $row['apellido']; ?></span>
 													</div>
 												</div>
-													<div class="profile-info-name"> Direccion </div>
+													<div class="profile-info-name"> Dirección </div>
 
 													<div class="profile-info-value">
 														<i class="fa fa-map-marker light-orange bigger-110"></i>
-														<span class="editable" id="estado"><?php echo $row['estado']; ?></span>
-														<span class="editable" id="direccion"><?php echo $row['direccion']; ?></span>
+														<span class="editable" id="estado" name="estado"><?php echo $row['estado']; ?></span>
+														<span class="editable" id="direccion" name="direccion"><?php echo $row['direccion']; ?></span>
 													</div>
 
 												<div class="profile-info-row">
 													<div class="profile-info-name"> Edad </div>
 
 													<div class="profile-info-value">
-														<span class="editable" id="edad">Edad</span>
+														<span class="editable" id="edad" name="edad"><?php echo $row['edad']; ?></span>
+													</div>
+												</div>
+												<div class="profile-info-row">
+													<div class="profile-info-name"> Fecha de nacimiento </div>
+
+													<div class="profile-info-value">
+														<span class="editable" id="nacimiento" name="nacimiento"><?php echo $row['nacimiento']; ?></span>
 													</div>
 												</div>
 
@@ -429,72 +435,72 @@ if ($_GET['id'] == ""){
 													<div class="profile-info-name"> Contratado el </div>
 
 													<div class="profile-info-value">
-														<span class="editable" id="contrato_fecha">2010/06/20</span>
+														<span class="editable" id="f_contratado" name="f_contratado"><?php echo $row['f_contratado'];?></span>
 													</div>
 												</div>
 
 												<div class="profile-info-row">
-													<div class="profile-info-name"> Telefono </div>
+													<div class="profile-info-name"> Teléfono </div>
 
 													<div class="profile-info-value">
-														<span class="editable" id="telefono"><?php echo $row['telefono']; ?></span>
+														<span class="editable" id="telefono" name="telefono"><?php echo $row['telefono']; ?></span>
 													</div>
 												</div>
 												<div class="profile-info-row">
 													<div class="profile-info-name"> Correo </div>
 
 													<div class="profile-info-value">
-														<span class="editable" id="cedula"><?php echo $row['correo']; ?></span>
+														<span class="editable" id="correo" name="correo"><?php echo $row['correo']; ?></span>
 													</div>
 												</div>
 
-												<div class="profile-info-row">
-													<div class="profile-info-name"> Condicion </div>
-
-													<div class="profile-info-value">
-														<span class="editable" id="cedula"><?php echo $row['condicion']; ?></span>
-													</div>
-												</div>
 												<div class="profile-info-row">
 													<div class="profile-info-name"> Genero </div>
 
 													<div class="profile-info-value">
-														<span class="editable" id="cedula"><?php echo $row['condicion']; ?></span>
+														<span class="editable" id="genero" name="genero"><?php echo $row['genero']; ?></span>
 													</div>
 												</div>
 												<div class="profile-info-row">
-													<div class="profile-info-name"> Formacion </div>
+													<div class="profile-info-name"> Condición </div>
 
 													<div class="profile-info-value">
-														<span class="editable" id="cedula"><?php echo $row['formacion']; ?></span>
+														<span class="editable" id="condicion" name="condicion"><?php echo $row['condicion']; ?></span>
+													</div>
+												</div>
+												<div class="profile-info-row">
+													<div class="profile-info-name"> Formación </div>
+
+													<div class="profile-info-value">
+														<span class="editable" id="formacion" name="formacion"><?php echo $row['formacion']; ?></span>
 													</div>
 												</div>
 												<div class="profile-info-row">
 													<div class="profile-info-name"> Banco de preferencia </div>
 
 													<div class="profile-info-value">
-														<span class="editable" id="cedula"><?php echo $row['banco']; ?></span>
+														<span class="editable" id="banco" name="banco"><?php echo $row['banco']; ?></span>
 													</div>
 												</div>
 												<div class="profile-info-row">
 													<div class="profile-info-name"> Numero de cuenta </div>
 
 													<div class="profile-info-value">
-														<span class="editable" id="cedula"><?php echo $row['nr_cuenta']; ?></span>
+														<span class="editable" id="nr_cuenta" name="nr_cuenta"><?php echo $row['nr_cuenta']; ?></span>
 													</div>
 												</div>
 												<div class="profile-info-row">
 													<div class="profile-info-name"> Materia principal impartida </div>
 
 													<div class="profile-info-value">
-														<span class="editable" id="cedula"><?php echo $row['materia1']; ?></span>
+														<span class="editable" id="materia1" name="materia1"><?php echo $row['materia1']; ?></span>
 													</div>
 												</div>
 												<div class="profile-info-row">
 													<div class="profile-info-name"> Materia secundaria </div>
 
 													<div class="profile-info-value">
-														<span class="editable" id="cedula"><?php echo $row['materia2']; ?></span>
+														<span class="editable" id="materia2" name="materia2"><?php echo $row['materia2']; ?></span>
 													</div>
 												</div>
 
@@ -502,7 +508,39 @@ if ($_GET['id'] == ""){
 													<div class="profile-info-name"> Notas sobre el profesor </div>
 
 													<div class="profile-info-value">
-														<span class="editable" id="about">Editable as WYSIWYG</span>
+														<span class="editable" id="about">Editar con WYSIWYG</span>
+													</div>
+												</div>
+												<div class="profile-info-row">
+													<div class="profile-info-name">Quejas</div>
+													<div class="profile-info-valuie">
+														<?php 
+														// query para seleccionar todos los datos del profesor.
+														$query = "  SELECT 	*
+													            	FROM 	quejas
+													          		WHERE 	cedula = :cedula 
+													        "; 
+													        $query_params = array( 
+													            ':cedula' => $row['cedula']
+													        ); 
+													         
+													        try{ 
+													            $stmt = $db->prepare($query); 
+													            $quejas_result = $stmt->execute($query_params); 
+													        } 
+													        catch(PDOException $ex){ 
+															echo "<div class='panel-body'>
+													                <div class='alert alert-warning alert-dismissable'>
+													            	    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+													            	    Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+																	</div>
+																 </div>" .$ex->getMessage();
+															} 
+													        $row_queja = $stmt->fetchAll();
+													        $num_rows = count($row_queja);
+													        echo $num_rows;
+														?>
+
 													</div>
 												</div>
 											</div>
@@ -510,12 +548,12 @@ if ($_GET['id'] == ""){
 											<div class="space-6"></div>
 
 											<div class="center">
-												<button type="button" class="btn btn-sm btn-primary btn-white btn-round">
-													<i class="ace-icon fa fa-rss bigger-150 middle orange2"></i>
-													<span class="bigger-110">Opcion Extra</span>
+												<a href="perfil.php?id=<?PHP echo $row['ID']?>&queja=si"><button type="button" class="btn btn-sm btn-warning btn-white btn-round">
+													<i class="ace-icon fa fa-flag bigger-150 middle orange2"></i>
+													<span class="bigger-110">Agregar queja</span>
 
 													<i class="icon-on-right ace-icon fa fa-arrow-right"></i>
-												</button>
+												</button></a>
 											</div>
 										</div>
 									</div>
@@ -630,6 +668,11 @@ if ($_GET['id'] == ""){
 					type: 'text',
 					name: 'nombre'
 			    });
+			    $('#apellido')
+				.editable({
+					type: 'text',
+					name: 'nombre'
+			    });
 			
 			    $('#estado')
 				.editable({
@@ -668,24 +711,6 @@ if ($_GET['id'] == ""){
 						step: 1,
 						on_sides: true
 						//,nativeUI: true//if true and browser support input[type=number], native browser control will be used
-					}
-				});
-				
-			
-			    $('#login').editable({
-			        type: 'slider',
-					name : 'login',
-					
-					slider : {
-						 min : 1,
-						  max: 50,
-						width: 100
-						//,nativeUI: true//if true and browser support input[type=range], native browser control will be used
-					},
-					success: function(response, newValue) {
-						if(parseInt(newValue) == 1)
-							$(this).html(newValue + " hour ago");
-						else $(this).html(newValue + " hours ago");
 					}
 				});
 			
@@ -732,7 +757,7 @@ if ($_GET['id'] == ""){
 								if(error_type == 1) {//file format error
 									last_gritter = $.gritter.add({
 										title: 'Este archivo NO es una foto!',
-										text: 'Porfavor elija un archivo de formato jpg|gif|png!',
+										text: 'Por favor elija un archivo de formato jpg|gif|png!',
 										class_name: 'gritter-error gritter-center'
 									});
 								} else if(error_type == 2) {//file size rror
@@ -902,7 +927,6 @@ if ($_GET['id'] == ""){
     $(window).load(function(){
         $('#queja').modal('show');
     });
-
 		</script>
 		<?php
 		//creamos una busqueda para las quejas
@@ -920,7 +944,7 @@ if ($_GET['id'] == ""){
             <form name='enviar_queja' method='post' action='perfil.php?id=";
             echo $row['ID'];
             echo "' role='form'>
-            <div class='modal fade' id='queja' tabindex='-1' role='dialog' aria-labeledby='AlertaLabel' aria-hidden='false'>
+            <div class='modal fade' id='queja' tabindex='-1' role='dialog' aria-labeledby='quejaLabel' aria-hidden='false'>
 			<div class='modal-dialog'>
                 <div class='modal-content'>
 					<div class='modal-header'>
@@ -939,7 +963,7 @@ if ($_GET['id'] == ""){
 							echo "</option>";
 							}
 						echo "</select>
-						<p> Ahora puedes acceder al sistema, por medio del panel que aparecera al cerrar esta ventana.</p>
+						<p> De igual forma puedes hacer clic en la X en la parte superior para evitar enviar la queja.</p>
 					</div>
 					<div class='modal-footer'>
 					<button type='submit' id='enviar_queja' name='enviar_queja' class='btn btn-info'>¡Enviar!</button>
@@ -964,8 +988,8 @@ if ($_GET['id'] == ""){
     	 * 
     	 * TODO
     	 * Seleccionar la cedula del ID ---- Listo!
-    	 * Agregar Cedula - Queja - Nivel a tabla quejas
-    	 * Actualizar la suma de las quejas al profesor.
+    	 * Agregar Cedula - Queja - Nivel a tabla quejas --Listo
+    	 * Actualizar la suma de las quejas al profesor. -- No implementado
     	 */
         /// hacemos un query para seleccionar la cedula
         

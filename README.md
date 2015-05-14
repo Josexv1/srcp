@@ -3,6 +3,11 @@ Sistema de Registro y control de profesores en PHP MySQL y PDO
 
 El sistema esta hecho en PHP MySQL. Utilizando PDO para realizar las conexiones a la base de datos.
 
+# Cambios en version.
+* Cambiado de usar SHA256 a SHA512
+* Agregado Iteracion de 65536 para el hashing del password
+* Agregado mcrypt_create_iv() como metodo para generar el salt.
+
 # Listo
 * Registro del docente
 * Lista de docentes
@@ -11,6 +16,7 @@ El sistema esta hecho en PHP MySQL. Utilizando PDO para realizar las conexiones 
 
 # TO-DO
 
+* Cambiar metodo de encriptamiento de las password con nuevas funciones de php
 * Mudar los errores desde "die" a un modal
 * Modificar los mensajes de error para que el .$ex->getMessage() quede dentro del modal de error
 * Agregar constancias
