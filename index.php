@@ -10,10 +10,10 @@ $query = "  SELECT  ID,
 					salt,
 					correo,
             FROM 	usuarios 
-            WHERE 	ID = :id 
+            WHERE 	cookie = :cookie 
         "; 
         $query_params = array( 
-            ':id' => $_COOKIE['id_usuario'] 
+            ':cookie' => $_COOKIE['marca_aleatoria_usuario'] 
         ); 
          
         try{ 
@@ -33,11 +33,13 @@ $query = "  SELECT  ID,
 		header('Location: panel.php');
    } // Terminamos de probar la cookie
 } // Fin del isset de la cookie.
-    if(!empty($_POST)){ 
+    if (!empty($_POST['login'])){ 
         $query = "  SELECT	ID, 
 		                	password,
 		                	salt,
-		                	correo
+		                	correo,
+		                	nivel,
+		                	logueado
 		            FROM 	usuarios 
 		            WHERE	correo = :correo 
         "; 
@@ -57,9 +59,19 @@ $query = "  SELECT  ID,
 					</div>
 			  </div>" .$ex->getMessage();
 		} 
-        
-		$login_ok = false; 
+
+		// verificamos si ya el usuario está logueado.
+		// si no lo esta le dejamos pasar, si lo esta mostramos un error.
+		// porque algo extraño pasa si se intenta loguear el mismo user desde dos locaciones.
+
+		
         $row = $stmt->fetch(); 
+        if ($row['logueado'] === 'SI') {
+			header("Location: index.php?accion=logueado");
+			exit;
+		}
+		// Ponemos el login_ok en falso para chequear el password.
+		$login_ok = false; 
 		$id_usuario = $row['ID'];
         if($row){ 
             $check_password = hash('sha512', $_POST['password'] . $row['salt']); 
@@ -72,6 +84,7 @@ $query = "  SELECT  ID,
         } 
 
         if($login_ok){ 
+
 	  //INICIO DE LA COOKIE.
 	  //es que pidió memorizar el usuario
       //1) creo una marca aleatoria en el registro de este usuario
@@ -81,11 +94,12 @@ $query = "  SELECT  ID,
       $numero_aleatorio = mt_rand(1000000,999999999);
       //2) meto la marca aleatoria en la tabla de usuario
 	  
-
- $query = "UPDATE usuarios SET cookie = :numero WHERE correo = :correo";
+$logueado = 'SI';
+ $query = "UPDATE usuarios SET cookie = :numero, logueado = :logueado WHERE correo = :correo";
         $query_params = array(
 			':numero' => $numero_aleatorio,
-            ':correo' => $_POST['correo']
+            ':correo' => $_POST['correo'],
+            ':logueado' => $logueado
         );
         try { 
             $stmt = $db->prepare($query);
@@ -103,21 +117,22 @@ $query = "  SELECT  ID,
 	  // Aqui verificamos que el campo recordar este marcado si es 1, lo recordamos por 1 año, si no por 1 hora.
 	if ($_POST["recordar"]=="1"){		
   	//3) ahora meto una cookie en la computadora del usuario con el identificador del usuario y la cookie aleatoria
+  	//4) encriptamos el id del usuario y el numero aleatorio para evitar dar informacion a los hackers
   		setcookie("id_usuario", $id_usuario, time()+(60*60*24*365));
+  		$numero_aleatorio = hash('sha512',$numero_aleatorio);
   		setcookie("marca_aleatoria_usuario", $numero_aleatorio, time()+(60*60*24*365));
 	}else{
 	    setcookie("id_usuario", $id_usuario, time()+(60*60));
   		setcookie("marca_aleatoria_usuario", $numero_aleatorio, time()+(60*60));
   	}
 	// FIN DE LA COOKIE.
-
-	header("Location: index.php"); 
+	header("Location: panel.php"); 
     } 
     else{ 
        //print("Fallo el inicio de sesion."); 
 		header("Location: index.php?accion=pass_error"); 
-    } 
-    } 
+    }  
+}
 	
 	if(isset($_GET['accion'])){
 
@@ -198,8 +213,210 @@ $query = "  SELECT  ID,
             </div>
         </div>";
           break;
+        case 'inactivo':
+          echo "<div class='modal fade' id='Alerta' tabindex='-1' role='dialog' aria-labeledby='AlertaLabel' aria-hidden='false'>
+       <div class='modal-dialog'>
+                 <div class='modal-content'>
+              <div class='modal-header'>
+          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+              <h3>¡Tu cuenta no está activada!</h3>
+              </div>
+              <div class='modal-body'>
+              <p>Tu cuenta se encuentra inactiva, espera a que un Adminisrador revise tu registro y te otorge los permisos necesarios.</p>
+              </div>
+              <div class='modal-footer'>
+<button type='button' class='btn btn-info' data-dismiss='modal'>¡Entiendo!</button>
+               </div>
+                </div>
+            </div>
+        </div>";
+          break;
+        case 'logueado':
+          echo "<div class='modal fade' id='Alerta' tabindex='-1' role='dialog' aria-labeledby='AlertaLabel' aria-hidden='false'>
+       <div class='modal-dialog'>
+                 <div class='modal-content'>
+              <div class='modal-header'>
+          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+              <h3>¡Hey que haces!</h3>
+              </div>
+              <div class='modal-body'>
+              <p>No se que intentas, pero esta accion esta prohibida.</p>
+              </div>
+              <div class='modal-footer'>
+<button type='button' class='btn btn-info' data-dismiss='modal'>¡Entiendo!</button>
+               </div>
+                </div>
+            </div>
+        </div>";
+          break;
 	 						  }
     }
+        if (!empty($_POST['registro']))
+    {
+        // Nos aseguramos de que todos los campos esten correctos, por si se saltan la validacion HTML5
+        if(empty($_POST['nombre']))
+        { 
+		header('Location: index.php?accion=error');
+		die();
+		exit;
+		}
+        if(empty($_POST['apellido']))
+        { 
+			echo "<div class='panel-body'>
+		  		 <div class='alert alert-warning alert-dismissable'>
+			      <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Porfavor coloca el apellido correctamente.
+							</div>";
+							header('Location: index.php?accion=error');
+							exit;
+		}
+		if(empty($_POST['correo']))
+        {
+			echo "<div class='panel-body'>
+			  <div class='alert alert-warning alert-dismissable'>
+		   <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Porfavor coloca el correo correctamente.
+						</div>";
+						header('Location: index.php?accion=error');
+						exit;
+	    }
+        if(!filter_var($_POST['correo'], FILTER_VALIDATE_EMAIL))
+        { 
+		echo "<div class='panel-body'>
+	  <div class='alert alert-warning alert-dismissable'>
+	   <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>El correo electronico tiene un formato invalido.
+		</div>";
+		header('Location: index.php?accion=error');
+		exit;	
+		}
+		if(empty($_POST['telefono']))
+        { 
+		echo "<div class='panel-body'>
+	  <div class='alert alert-warning alert-dismissable'>
+		   <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Porfavor coloca el telefono correctamente.
+						</div>";
+						header('Location: index.php?accion=error');
+						exit;
+		}
+		
+			//buscamos errores
+	if(isset($error)){
+	  foreach($error as $error){
+				echo "<div class='panel-body'>
+                       <div class='alert alert-danger alert-dismissable'>
+                       <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Hemos detectado los siguientes errores:</div>" .$error;
+					   header('Location: index.php?accion=error');
+					   exit;
+	  }
+	}
+if(strlen($_POST['password']) < 7){ //verificamos que la clave tenga mas de 7 digitos para que tenga algo de seguridad.
+	echo "<div class='panel-body'>
+          <div class='alert alert-danger alert-dismissable'>
+          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>La contraseña no puede tener menos de 7 caracteres.</div>";
+		  header('Location: index.php?accion=error');
+		  exit;
+	} 
+if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digitos, formato de venezuela.
+	echo "<div class='panel-body'>
+          <div class='alert alert-danger alert-dismissable'>
+          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>El telefono debe tener el siguiente formato -> \" 04165001020 \" con 11 caracteres de longitud</div>";
+		  header('Location: index.php?accion=error');
+		  exit;
+	} 
+	
+	/*?>if($_POST['password'] != $_POST['passwordConfirm']){
+		$error[] = 'Las contraseñas no concuerdan..';
+	}*/
+          
+        // verificamos si el correo ya está en la base de datos
+        $query = "
+            SELECT 1
+            FROM usuarios
+            WHERE correo = :correo
+        ";
+        $query_params = array( ':correo' => $_POST['correo'] );
+        try {
+            $stmt = $db->prepare($query);
+            $result = $stmt->execute($query_params);
+        }
+        catch(PDOException $ex){ 
+		//die("Fallamos al hacer la busqueda: " . $ex->getMessage()); 
+		// si hay un error en la consulta nos muestra cual fue el error.
+		echo "<div class='panel-body'>
+        		<div class='alert alert-danger alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+				</div>" .$ex->getMessage();
+				exit;
+		}
+        $row = $stmt->fetch();
+        if($row){ 
+		//die("El correo ya esta en uso"); 
+		//si obtenemos las consultas y el correo es igual al que enviamos, nos nuestra el errror de que ya esta registrado.
+				echo "<div class='panel-body'>
+                            <div class='alert alert-danger alert-dismissable'>
+                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>El correo electronico ya está en uso. Intenta con otro.
+								</div>";
+								header('Location: index.php?accion=error');
+								exit;
+		}
+         $nivel = 0;
+        /// Si todo pasa enviamos los datos a la base de datos mediante PDO para evitar Inyecciones SQL
+        $query = "
+            INSERT INTO usuarios (
+                nombre,
+                apellido,
+				correo,
+                telefono,
+                direccion,
+                password,
+                salt,
+                cedula,
+                nivel
+            ) VALUES (
+                :nombre,
+                :apellido,
+                :correo,
+                :telefono,
+                :direccion,
+                :password,
+                :salt,
+                :cedula,
+                :nivel
+            )
+        ";
+          
+        // Hacemos un salt para la seña y la encriptamos a numeros aleatorios en sha256 por seguridad.
+        // Genero una sal aleatorea. En este caso uso mcrypt_create_iv y su
+        // resultado lo traduzco a algo un poco mas "legible".
+        $salt = str_replace('=', '.', base64_encode(mcrypt_create_iv(20)));
+        $password = hash('sha512', $_POST['password'] . $salt);
+        //  Incluimos unas 65536 rondas para el hash que queremos mostrar, asi el proceso es lento y hacemos costoso el bruteforce
+        for($round = 0; $round < 65536; $round++){
+         $password = hash('sha512', $password . $salt);
+          }
+        $query_params = array(
+            ':nombre' => $_POST['nombre'],
+			':apellido' => $_POST['apellido'],
+            ':correo' => $_POST['correo'],
+            ':telefono' => $_POST['telefono'],
+            ':direccion' => $_POST['direccion'],
+            ':password' => $password,
+            ':salt' => $salt,
+			':cedula' => $_POST['cedula'],
+            ':nivel' => $nivel           
+        );
+        try { 
+            $stmt = $db->prepare($query);
+            $result = $stmt->execute($query_params);
+        }
+        catch(PDOException $ex){
+		// Si tenemos problemas para ejecutar la consulta imprimimos el error
+			echo "<div class='panel-body'>
+                     <div class='alert alert-warning alert-dismissable'>
+                          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                          Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+					</div>" .$ex->getMessage();}
+			// Si todo pasa como deberia ser, referimos al usuario al panel de inicio de sesion con el mensaje de bienvenida.
+		header('Location: index.php?accion=registrado');
+}
 ?> 
 <!DOCTYPE html>
 <html lang="en">
@@ -291,7 +508,7 @@ $query = "  SELECT  ID,
 															<span class="lbl"> Recordarme? </span>
 														</label>
 
-														<button type="submit" class="width-35 pull-right btn btn-sm btn-primary">
+														<button type="submit" value="login" name="login" id="login" class="width-35 pull-right btn btn-sm btn-primary">
 															<i class="ace-icon fa fa-key"></i>
 															<span class="bigger-110">Entrar</span>
 														</button>
@@ -392,53 +609,59 @@ $query = "  SELECT  ID,
 											<div class="space-6"></div>
 											<p> Rellene con sus datos para registrarse. </p>
 
-											<form action="index.php" method="post" role="form" name="form_registro">
+											<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" role="form" name="registro">
 												<fieldset>
 
 													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input onkeyup="this.value=this.value.toUpperCase()" type="text" class="form-control" placeholder="Nombre" id="nombre" required />
+														<span class="block input-icon input-icon-left">
+															<input name="nombre" onkeyup="this.value=this.value.toUpperCase()" type="text" class="form-control" placeholder="Nombre" id="nombre" required />
 															<i class="ace-icon fa fa-user"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input onkeyup="this.value=this.value.toUpperCase()" type="text" class="form-control" placeholder="Apellido" id="apellido" required />
+														<span class="block input-icon input-icon-left">
+															<input name="apellido" onkeyup="this.value=this.value.toUpperCase()" type="text" class="form-control" placeholder="Apellido" id="apellido" required />
 															<i class="ace-icon fa fa-user"></i>
 														</span>
 													</label>
 													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" type="text" class="form-control" placeholder="Cedula" required />
-															<i class="ace-icon fa fa-credit-card"></i>
+														<span class="block input-icon input-icon-left">
+															<input name="cedula" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" type="text" class="form-control" placeholder="Cedula" required />
+															<i class="ace-icon fa fa-list-alt"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input onkeyup="this.value=this.value.toUpperCase()" type="email" class="form-control" placeholder="Correo" required />
-															<i class="ace-icon fa fa-envelope"></i>
+														<span class="block input-icon input-icon-left">
+															<input name="correo" onkeyup="this.value=this.value.toUpperCase()" type="email" class="form-control" placeholder="Correo" required />
+															<i class="ace-icon fa fa-envelope-o"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" type="text" class="form-control" placeholder="Telefono" required />
+														<span class="block input-icon input-icon-left">
+															<input name="telefono" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" type="text" class="form-control" placeholder="Telefono" required />
 															<i class="ace-icon fa fa-phone"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="password" class="form-control" placeholder="Contraseña" required />
+														<span class="block input-icon input-icon-left">
+															<input name="password" type="password" class="form-control" placeholder="Contraseña" required />
+															<i class="ace-icon fa fa-lock"></i>
+														</span>
+													</label>
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-left">
+															<input name="password" type="re-password" class="form-control" placeholder="Repita la Contraseña" required />
 															<i class="ace-icon fa fa-lock"></i>
 														</span>
 													</label>
 
 													<label class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input onkeyup="this.value=this.value.toUpperCase()" type="text" class="form-control" placeholder="Direccion" required />
+														<span class="block input-icon input-icon-left">
+															<input name="direccion" onkeyup="this.value=this.value.toUpperCase()" type="text" class="form-control" placeholder="Direccion" required />
 															<i class="ace-icon fa fa-globe"></i>
 														</span>
 													</label>
@@ -459,7 +682,7 @@ $query = "  SELECT  ID,
 															<span class="bigger-110">Limpiar</span>
 														</button>
 
-														<button type="submit" name="registro" id="registro" class="width-65 pull-right btn btn-sm btn-success">
+														<button type="submit" value="registro" name="registro" id="registro" class="width-65 pull-right btn btn-sm btn-success">
 															<span class="bigger-110">Registrar</span>
 
 															<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
@@ -571,170 +794,4 @@ $query = "  SELECT  ID,
 			});
 		</script>
 	</body>
-<?php
-    if(isset($_POST['registro'])) 
-    {
-        // Nos aseguramos de que todos los campos esten correctos, por si se saltan la validacion HTML5
-        if(empty($_POST['nombre']))
-        { 
-		header('Location: registro.php?accion=error');
-		exit;
-		}
-        if(empty($_POST['apellido']))
-        { 
-			echo "<div class='panel-body'>
-		  		 <div class='alert alert-warning alert-dismissable'>
-			      <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Porfavor coloca el apellido correctamente.
-							</div>";
-							header('Location: registro.php?accion=error');
-							exit;
-		}
-		if(empty($_POST['correo']))
-        {
-			echo "<div class='panel-body'>
-			  <div class='alert alert-warning alert-dismissable'>
-		   <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Porfavor coloca el correo correctamente.
-						</div>";
-						header('Location: registro.php?accion=error');
-						exit;
-	    }
-        if(!filter_var($_POST['correo'], FILTER_VALIDATE_EMAIL))
-        { 
-		echo "<div class='panel-body'>
-	  <div class='alert alert-warning alert-dismissable'>
-	   <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>El correo electronico tiene un formato invalido.
-		</div>";
-		header('Location: registro.php?accion=error');
-		exit;	
-		}
-		if(empty($_POST['telefono']))
-        { 
-		echo "<div class='panel-body'>
-	  <div class='alert alert-warning alert-dismissable'>
-		   <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Porfavor coloca el telefono correctamente.
-						</div>";
-						header('Location: registro.php?accion=error');
-						exit;
-		}
-		
-			//buscamos errores
-	if(isset($error)){
-	  foreach($error as $error){
-				echo "<div class='panel-body'>
-                       <div class='alert alert-danger alert-dismissable'>
-                       <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Hemos detectado los siguientes errores:</div>" .$error;
-					   header('Location: registro.php?accion=error');
-					   exit;
-	  }
-	}
-if(strlen($_POST['password']) < 7){ //verificamos que la clave tenga mas de 7 digitos para que tenga algo de seguridad.
-	echo "<div class='panel-body'>
-          <div class='alert alert-danger alert-dismissable'>
-          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>La contraseña no puede tener menos de 7 caracteres.</div>";
-		  header('Location: registro.php?accion=error');
-		  exit;
-	} 
-if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digitos, formato de venezuela.
-	echo "<div class='panel-body'>
-          <div class='alert alert-danger alert-dismissable'>
-          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>El telefono debe tener el siguiente formato -> \" 04165001020 \" con 11 caracteres de longitud</div>";
-		  header('Location: registro.php?accion=error');
-		  exit;
-	} 
-	
-	/*?>if($_POST['password'] != $_POST['passwordConfirm']){
-		$error[] = 'Las contraseñas no concuerdan..';
-	}*/
-          
-        // verificamos si el correo ya está en la base de datos
-        $query = "
-            SELECT 1
-            FROM usuarios
-            WHERE correo = :correo
-        ";
-        $query_params = array( ':correo' => $_POST['correo'] );
-        try {
-            $stmt = $db->prepare($query);
-            $result = $stmt->execute($query_params);
-        }
-        catch(PDOException $ex){ 
-		//die("Fallamos al hacer la busqueda: " . $ex->getMessage()); 
-		// si hay un error en la consulta nos muestra cual fue el error.
-		echo "<div class='panel-body'>
-        		<div class='alert alert-danger alert-dismissable'>
-                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
-				</div>" .$ex->getMessage();
-				exit;
-		}
-        $row = $stmt->fetch();
-        if($row){ 
-		//die("El correo ya esta en uso"); 
-		//si obtenemos las consultas y el correo es igual al que enviamos, nos nuestra el errror de que ya esta registrado.
-				echo "<div class='panel-body'>
-                            <div class='alert alert-danger alert-dismissable'>
-                                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>El correo electronico ya está en uso. Intenta con otro.
-								</div>";
-								header('Location: registro.php?accion=error');
-								exit;
-		}
-         
-        /// Si todo pasa enviamos los datos a la base de datos mediante PDO para evitar Inyecciones SQL
-        $query = "
-            INSERT INTO usuarios (
-                nombre,
-                apellido,
-				correo,
-                telefono,
-                direccion,
-                password,
-                salt,
-                cedula,
-                nivel
-            ) VALUES (
-                :nombre,
-                :apellido,
-                :correo,
-                :telefono,
-                :direccion,
-                :password,
-                :salt,
-                :cedula,
-                :nivel
-            )
-        ";
-          
-        // Hacemos un salt para la seña y la encriptamos a numeros aleatorios en sha256 por seguridad.
-        // Genero una sal aleatorea. En este caso uso mcrypt_create_iv y su
-        // resultado lo traduzco a algo un poco mas "legible".
-        $salt = str_replace('=', '.', base64_encode(mcrypt_create_iv(20)));
-        $password = hash('sha512', $_POST['password'] . $salt);
-        //  Incluimos unas 65536 rondas para el hash que queremos mostrar, asi el proceso es lento y hacemos costoso el bruteforce
-        for($round = 0; $round < 65536; $round++){
-         $password = hash('sha512', $password . $salt);
-          }
-        $query_params = array(
-            ':nombre' => $_POST['nombre'],
-			':apellido' => $_POST['apellido'],
-            ':correo' => $_POST['correo'],
-            ':telefono' => $_POST['telefono'],
-            ':direccion' => $_POST['direccion'],
-            ':password' => $password,
-            ':salt' => $salt,
-			':cedula' => $_POST['cedula'],
-            ':nivel' => $_POST['nivel']            
-        );
-        try { 
-            $stmt = $db->prepare($query);
-            $result = $stmt->execute($query_params);
-        }
-        catch(PDOException $ex){
-		// Si tenemos problemas para ejecutar la consulta imprimimos el error
-			echo "<div class='panel-body'>
-                     <div class='alert alert-warning alert-dismissable'>
-                          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
-								</div>" .$ex->getMessage();}
-			// Si todo pasa como deberia ser, referimos al usuario al panel de inicio de sesion con el mensaje de bienvenida.
-		header('Location: index.php?accion=registrado');
-}
-?>
 </html>

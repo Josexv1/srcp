@@ -5,7 +5,7 @@ if (isset($_COOKIE["id_usuario"]) && isset($_COOKIE["marca_aleatoria_usuario"]))
    //además voy a comprobar que esas variables no estén vacías
    if ($_COOKIE["id_usuario"]!="" || $_COOKIE["marca_aleatoria_usuario"]!=""){
 // 
-$query = "  SELECT nombre
+$query = "  SELECT nombre, nivel
             FROM usuarios 
             WHERE ID = :id 
          "; 
@@ -31,6 +31,12 @@ $query = "  SELECT nombre
 	//si no estamos logueados nos envian directo al panel de login.
 	header('Location: index.php?accion=log_error');
 	}
+	    if ($row['nivel'] === '0') {
+	    $numero_aleatorio = $row['cookie'];
+        setcookie("id_usuario", $id_usuario, time()-1000);
+  		setcookie("marca_aleatoria_usuario", $numero_aleatorio, time()-1000);
+        header('Location: index.php?accion=inactivo');
+        exit;}
  ?>
 <!DOCTYPE html>
 <html lang="en">
