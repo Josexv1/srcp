@@ -7,6 +7,9 @@ El sistema esta hecho en PHP MySQL. Utilizando PDO para realizar las conexiones 
 * Cambiado de usar SHA256 a SHA512
 * Agregado Iteracion de 65536 para el hashing del password
 * Agregado mcrypt_create_iv() como metodo para generar el salt.
+* Agregando una entrada a la DB cuando el user esta logueado y cuando no. (con mensajes)
+* Agregada una nueva capa de seguridad, que evita el secuestro de Cookies
+* Agregado mensaje de error cuando se intenta loguear y el usuario ya esta logueado.
 
 # Listo
 * Registro del docente
