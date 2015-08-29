@@ -1,3 +1,5 @@
+#OUTDATED
+
 # SRCP
 Inicialmente era un sistema de control y registro de profesores, pero actualmente se modifico para ser un sistema integro de control de una institucion educativa, utilizando las ultimas tecnologias web, y metodos seguros de acceso al sistema, por medio de PDO, Contraseñas encriptadas en SHA512 y otras funciones.
 
