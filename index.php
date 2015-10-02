@@ -1,4 +1,4 @@
-	<?php 
+<?php 
     require("config.php"); 
 if (isset($_COOKIE["id_usuario"]) && isset($_COOKIE["marca_aleatoria_usuario"])){
    //Tengo cookies memorizadas
@@ -33,7 +33,7 @@ $query = "  SELECT  ID,
 		header('Location: panel.php');
    } // Terminamos de probar la cookie
 } // Fin del isset de la cookie.
-    if (!empty($_POST['login'])){ 
+if (!empty($_POST['login'])){ 
         $query = "  SELECT	ID, 
 		                	password,
 		                	salt,
@@ -132,10 +132,9 @@ $logueado = 'SI';
        //print("Fallo el inicio de sesion."); 
 		header("Location: index.php?accion=pass_error"); 
     }  
-}
+} // terminamos el isset de si quiere loguearse.
 	
-	if(isset($_GET['accion'])){
-
+if(isset($_GET['accion'])){
     //chequeamos la accion.
     switch ($_GET['accion']) {
         case 'registrado':
@@ -249,9 +248,9 @@ $logueado = 'SI';
             </div>
         </div>";
           break;
-	 						  }
-    }
-        if (!empty($_POST['registro']))
+	 	} //fin del switch
+  } //fin del isset accion
+if (!empty($_POST['registro']))
     {
         // Nos aseguramos de que todos los campos esten correctos, por si se saltan la validacion HTML5
         if(empty($_POST['nombre']))

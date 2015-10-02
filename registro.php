@@ -121,7 +121,8 @@ if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digi
                 password,
                 salt,
                 cedula,
-                nivel
+                nivel,
+                logueado
             ) VALUES (
                 :nombre,
                 :apellido,
@@ -131,7 +132,8 @@ if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digi
                 :password,
                 :salt,
                 :cedula,
-                :nivel
+                :nivel,
+                :logueado
             )
         ";
           
@@ -153,7 +155,8 @@ if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digi
             ':password' => $password,
             ':salt' => $salt,
 			':cedula' => $_POST['cedula'],
-            ':nivel' => $_POST['nivel']            
+            ':nivel' => $_POST['nivel'],
+            ':logueado' => 'NO'
         );
         try { 
             $stmt = $db->prepare($query);

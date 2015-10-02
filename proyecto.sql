@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.4.3
+-- version 4.2.12deb2
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: May 11, 2015 at 12:07 
--- Server version: 5.6.24
--- PHP Version: 5.6.8
+-- Servidor: localhost
+-- Tiempo de generación: 01-10-2015 a las 21:30:44
+-- Versión del servidor: 5.5.44-0+deb8u1
+-- Versión de PHP: 5.6.13-0+deb8u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,16 +17,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `proyecto`
+-- Base de datos: `proyecto`
 --
-CREATE DATABASE IF NOT EXISTS `proyecto` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `proyecto`;
 
 DELIMITER $$
 --
--- Procedures
+-- Procedimientos
 --
-DROP PROCEDURE IF EXISTS `secciones`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `secciones`(IN `ID` INT(10), IN `carrera` VARCHAR(20), IN `turno` VARCHAR(20), IN `nombre` VARCHAR(7))
     NO SQL
 INSERT INTO bitacora(host, usuario, operacion, modificado, tabla) VALUES (host,nombre,"insertar", NOW(),"secciones")$$
@@ -36,12 +33,11 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bitacora`
+-- Estructura de tabla para la tabla `bitacora`
 --
 
-DROP TABLE IF EXISTS `bitacora`;
 CREATE TABLE IF NOT EXISTS `bitacora` (
-  `id` int(11) NOT NULL,
+`id` int(11) NOT NULL,
   `operacion` varchar(10) DEFAULT NULL,
   `usuario` varchar(40) DEFAULT NULL,
   `host` varchar(30) NOT NULL,
@@ -50,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `bitacora` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `bitacora`
+-- Volcado de datos para la tabla `bitacora`
 --
 
 INSERT INTO `bitacora` (`id`, `operacion`, `usuario`, `host`, `modificado`, `tabla`) VALUES
@@ -61,16 +57,15 @@ INSERT INTO `bitacora` (`id`, `operacion`, `usuario`, `host`, `modificado`, `tab
 -- --------------------------------------------------------
 
 --
--- Table structure for table `configuracion`
+-- Estructura de tabla para la tabla `configuracion`
 --
 
-DROP TABLE IF EXISTS `configuracion`;
 CREATE TABLE IF NOT EXISTS `configuracion` (
   `carrera` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `configuracion`
+-- Volcado de datos para la tabla `configuracion`
 --
 
 INSERT INTO `configuracion` (`carrera`) VALUES
@@ -80,10 +75,9 @@ INSERT INTO `configuracion` (`carrera`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `horarios`
+-- Estructura de tabla para la tabla `horarios`
 --
 
-DROP TABLE IF EXISTS `horarios`;
 CREATE TABLE IF NOT EXISTS `horarios` (
   `cod_horario` varchar(10) NOT NULL,
   `dias` varchar(30) NOT NULL,
@@ -96,18 +90,17 @@ CREATE TABLE IF NOT EXISTS `horarios` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `l_quejas`
+-- Estructura de tabla para la tabla `l_quejas`
 --
 
-DROP TABLE IF EXISTS `l_quejas`;
 CREATE TABLE IF NOT EXISTS `l_quejas` (
-  `id` int(11) NOT NULL,
+`id` int(11) NOT NULL,
   `queja` varchar(100) NOT NULL,
   `nivel` int(1) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `l_quejas`
+-- Volcado de datos para la tabla `l_quejas`
 --
 
 INSERT INTO `l_quejas` (`id`, `queja`, `nivel`) VALUES
@@ -120,12 +113,11 @@ INSERT INTO `l_quejas` (`id`, `queja`, `nivel`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `profesores`
+-- Estructura de tabla para la tabla `profesores`
 --
 
-DROP TABLE IF EXISTS `profesores`;
 CREATE TABLE IF NOT EXISTS `profesores` (
-  `ID` int(100) NOT NULL,
+`ID` int(100) NOT NULL,
   `nombre` varchar(20) NOT NULL,
   `apellido` varchar(20) NOT NULL,
   `cedula` int(10) NOT NULL,
@@ -148,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `profesores` (
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `profesores`
+-- Volcado de datos para la tabla `profesores`
 --
 
 INSERT INTO `profesores` (`ID`, `nombre`, `apellido`, `cedula`, `direccion`, `telefono`, `correo`, `genero`, `condicion`, `formacion`, `especialidad`, `estado`, `banco`, `nr_cuenta`, `materia1`, `materia2`, `materia3`, `seguro_social`, `sueldo`, `quejas`) VALUES
@@ -167,19 +159,18 @@ INSERT INTO `profesores` (`ID`, `nombre`, `apellido`, `cedula`, `direccion`, `te
 -- --------------------------------------------------------
 
 --
--- Table structure for table `quejas`
+-- Estructura de tabla para la tabla `quejas`
 --
 
-DROP TABLE IF EXISTS `quejas`;
 CREATE TABLE IF NOT EXISTS `quejas` (
-  `id` int(100) NOT NULL,
+`id` int(100) NOT NULL,
   `cedula` int(10) NOT NULL,
   `quejas` varchar(200) NOT NULL,
   `nivel` int(1) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `quejas`
+-- Volcado de datos para la tabla `quejas`
 --
 
 INSERT INTO `quejas` (`id`, `cedula`, `quejas`, `nivel`) VALUES
@@ -193,19 +184,18 @@ INSERT INTO `quejas` (`id`, `cedula`, `quejas`, `nivel`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `secciones`
+-- Estructura de tabla para la tabla `secciones`
 --
 
-DROP TABLE IF EXISTS `secciones`;
 CREATE TABLE IF NOT EXISTS `secciones` (
-  `ID` int(10) NOT NULL,
+`ID` int(10) NOT NULL,
   `carrera` varchar(20) COLLATE latin1_general_ci NOT NULL,
   `turno` varchar(20) COLLATE latin1_general_ci NOT NULL,
   `nombre` varchar(7) COLLATE latin1_general_ci NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
--- Dumping data for table `secciones`
+-- Volcado de datos para la tabla `secciones`
 --
 
 INSERT INTO `secciones` (`ID`, `carrera`, `turno`, `nombre`) VALUES
@@ -222,106 +212,105 @@ INSERT INTO `secciones` (`ID`, `carrera`, `turno`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usuarios`
+-- Estructura de tabla para la tabla `usuarios`
 --
 
-DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE IF NOT EXISTS `usuarios` (
-  `ID` int(5) NOT NULL,
+`ID` int(5) NOT NULL,
   `nombre` varchar(20) NOT NULL,
   `apellido` varchar(20) NOT NULL,
   `correo` varchar(20) NOT NULL,
   `telefono` varchar(12) NOT NULL,
   `direccion` varchar(20) NOT NULL,
-  `password` char(64) NOT NULL,
-  `salt` char(16) NOT NULL,
+  `password` char(128) NOT NULL,
+  `salt` char(28) NOT NULL,
   `cedula` int(10) NOT NULL,
   `nivel` int(1) NOT NULL,
-  `cookie` int(10) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  `cookie` int(10) NOT NULL,
+  `logueado` varchar(2) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `usuarios`
+-- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`ID`, `nombre`, `apellido`, `correo`, `telefono`, `direccion`, `password`, `salt`, `cedula`, `nivel`, `cookie`) VALUES
-(4, 'Miguel', 'Cervantes', 'miguel@cervantes.de', '04169564705', 'Carrera 9', 'e2816d99b3c19ff4546d79092b5765ec21c63ad49c6a50906e8c4c4fea709963', '3d9968c044a83583', 22261129, 1, 655568098);
+INSERT INTO `usuarios` (`ID`, `nombre`, `apellido`, `correo`, `telefono`, `direccion`, `password`, `salt`, `cedula`, `nivel`, `cookie`, `logueado`) VALUES
+(10, 'MIGUEL', 'CERVANTES', 'MIGUEL@CERVANTES.DE', '0416000000', 'CALLE LARA', 'a3fddad261a4736063fb05a9d7ef7e5955bfae15b0d4fa0a30a53f5849fc438ad7d52f3dc6490c07e53ff97533395b27b5134d70a8c96d208dfa60bdc89180f4', 'Zg6nxtCu3qSysb/RXhobj9wJrig.', 204449039, 1, 474568953, 'NO');
 
 --
--- Indexes for dumped tables
+-- Índices para tablas volcadas
 --
 
 --
--- Indexes for table `bitacora`
+-- Indices de la tabla `bitacora`
 --
 ALTER TABLE `bitacora`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `l_quejas`
+-- Indices de la tabla `l_quejas`
 --
 ALTER TABLE `l_quejas`
-  ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `profesores`
+-- Indices de la tabla `profesores`
 --
 ALTER TABLE `profesores`
-  ADD PRIMARY KEY (`ID`);
+ ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `quejas`
+-- Indices de la tabla `quejas`
 --
 ALTER TABLE `quejas`
-  ADD UNIQUE KEY `id` (`id`);
+ ADD UNIQUE KEY `id` (`id`);
 
 --
--- Indexes for table `secciones`
+-- Indices de la tabla `secciones`
 --
 ALTER TABLE `secciones`
-  ADD PRIMARY KEY (`ID`);
+ ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `usuarios`
+-- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`ID`),
-  ADD UNIQUE KEY `ID` (`ID`);
+ ADD PRIMARY KEY (`ID`), ADD UNIQUE KEY `ID` (`ID`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT for table `bitacora`
+-- AUTO_INCREMENT de la tabla `bitacora`
 --
 ALTER TABLE `bitacora`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
--- AUTO_INCREMENT for table `l_quejas`
+-- AUTO_INCREMENT de la tabla `l_quejas`
 --
 ALTER TABLE `l_quejas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
--- AUTO_INCREMENT for table `profesores`
+-- AUTO_INCREMENT de la tabla `profesores`
 --
 ALTER TABLE `profesores`
-  MODIFY `ID` int(100) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+MODIFY `ID` int(100) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 --
--- AUTO_INCREMENT for table `quejas`
+-- AUTO_INCREMENT de la tabla `quejas`
 --
 ALTER TABLE `quejas`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+MODIFY `id` int(100) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
--- AUTO_INCREMENT for table `secciones`
+-- AUTO_INCREMENT de la tabla `secciones`
 --
 ALTER TABLE `secciones`
-  MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
+MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
--- AUTO_INCREMENT for table `usuarios`
+-- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `ID` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+MODIFY `ID` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
