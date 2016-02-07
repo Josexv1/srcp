@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.12deb2
+-- version 4.2.12deb2+deb8u1
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 01-10-2015 a las 21:30:44
--- Versión del servidor: 5.5.44-0+deb8u1
--- Versión de PHP: 5.6.13-0+deb8u1
+-- Tiempo de generación: 30-01-2016 a las 18:58:11
+-- Versión del servidor: 5.5.46-0+deb8u1
+-- Versión de PHP: 5.6.14-0+deb8u1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `quejas` (
   `cedula` int(10) NOT NULL,
   `quejas` varchar(200) NOT NULL,
   `nivel` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `quejas`
@@ -179,7 +179,9 @@ INSERT INTO `quejas` (`id`, `cedula`, `quejas`, `nivel`) VALUES
 (3, 141455040, 'Llegar tarde', 1),
 (4, 30029303, 'Mala vestimenta', 1),
 (5, 30029303, 'Insultar autoridades', 4),
-(6, 30029301, 'Insultar autoridades', 4);
+(6, 30029301, 'Insultar autoridades', 4),
+(7, 141455040, 'Llegar tarde', 1),
+(8, 141455040, 'No entregar notas a tiempo', 2);
 
 -- --------------------------------------------------------
 
@@ -228,14 +230,16 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `nivel` int(1) NOT NULL,
   `cookie` int(10) NOT NULL,
   `logueado` varchar(2) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
 INSERT INTO `usuarios` (`ID`, `nombre`, `apellido`, `correo`, `telefono`, `direccion`, `password`, `salt`, `cedula`, `nivel`, `cookie`, `logueado`) VALUES
-(10, 'MIGUEL', 'CERVANTES', 'MIGUEL@CERVANTES.DE', '0416000000', 'CALLE LARA', 'a3fddad261a4736063fb05a9d7ef7e5955bfae15b0d4fa0a30a53f5849fc438ad7d52f3dc6490c07e53ff97533395b27b5134d70a8c96d208dfa60bdc89180f4', 'Zg6nxtCu3qSysb/RXhobj9wJrig.', 204449039, 1, 474568953, 'NO');
+(10, 'MIGUEL', 'CERVANTES', 'MIGUEL@CERVANTES.DE', '0416000000', 'CALLE LARA', 'a3fddad261a4736063fb05a9d7ef7e5955bfae15b0d4fa0a30a53f5849fc438ad7d52f3dc6490c07e53ff97533395b27b5134d70a8c96d208dfa60bdc89180f4', 'Zg6nxtCu3qSysb/RXhobj9wJrig.', 204449039, 1, 807989883, 'NO'),
+(11, 'JOSE', 'SUAREZ', 'JOZHEE@LIVE.COM', '04245559340', 'CALLE MONAGAS', '39f18d99a683ae05cf9883e7e7b0d4b98661a7838a10fe96900ee81f05122f36d032c3536024d7f63b22d65e8914df7351dde446bc1f776e656c203dc5400aae', 'EDg77wmsj2rQVZP5gWVpY2cPiUM.', 22261129, 1, 705771244, 'SI'),
+(12, 'CARLOS', 'GUTIERREZ', 'CARLOS@CORREO.COM', '04245559340', 'CALLE MONAGAS', '66150d1e40fa9a0cd48b0d8b0d720227ad972b7e681c6ae056c1dfa02b0c4adbf653c9a17a8780cdaa688f97461be590cecb06143ba40af320b37356da37cc4d', 'QDZWNgEv4/U14fmyFt/iUTPf1LE.', 6842091, 1, 548863952, 'NO');
 
 --
 -- Índices para tablas volcadas
@@ -300,7 +304,7 @@ MODIFY `ID` int(100) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 -- AUTO_INCREMENT de la tabla `quejas`
 --
 ALTER TABLE `quejas`
-MODIFY `id` int(100) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+MODIFY `id` int(100) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT de la tabla `secciones`
 --
@@ -310,7 +314,7 @@ MODIFY `ID` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-MODIFY `ID` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
+MODIFY `ID` int(5) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

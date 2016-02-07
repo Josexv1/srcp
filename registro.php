@@ -1,10 +1,10 @@
 <?php
-    require("config.php"); //Hacemos un requerimiento el archivo de configuracion.	 
+    require("config.php"); //Hacemos un requerimiento el archivo de configuracion.
     if(!empty($_POST))
     {
         // Nos aseguramos de que todos los campos esten correctos, por si se saltan la validacion HTML5
         if(empty($_POST['nombre']))
-        { 
+        {
 		echo "<div class='panel-body'>
               <div class='alert alert-warning alert-dismissable'>
                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Porfavor coloca el nombre correctamente.
@@ -13,7 +13,7 @@
 								exit;
 		}
         if(empty($_POST['apellido']))
-        { 
+        {
 			echo "<div class='panel-body'>
 		  		 <div class='alert alert-warning alert-dismissable'>
 			      <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Porfavor coloca el apellido correctamente.
@@ -31,16 +31,16 @@
 						exit;
 	    }
         if(!filter_var($_POST['correo'], FILTER_VALIDATE_EMAIL))
-        { 
+        {
 		echo "<div class='panel-body'>
 	  <div class='alert alert-warning alert-dismissable'>
 	   <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>El correo electronico tiene un formato invalido.
 		</div>";
 		header('Location: registro.php?accion=error');
-		exit;	
+		exit;
 		}
 		if(empty($_POST['telefono']))
-        { 
+        {
 		echo "<div class='panel-body'>
 	  <div class='alert alert-warning alert-dismissable'>
 		   <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Porfavor coloca el telefono correctamente.
@@ -48,7 +48,7 @@
 						header('Location: registro.php?accion=error');
 						exit;
 		}
-		
+
 			//buscamos errores
 	if(isset($error)){
 	  foreach($error as $error){
@@ -65,19 +65,19 @@ if(strlen($_POST['password']) < 7){ //verificamos que la clave tenga mas de 7 di
           <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>La contraseña no puede tener menos de 7 caracteres.</div>";
 		  header('Location: registro.php?accion=error');
 		  exit;
-	} 
+	}
 if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digitos, formato de venezuela.
 	echo "<div class='panel-body'>
           <div class='alert alert-danger alert-dismissable'>
           <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>El telefono debe tener el siguiente formato -> \" 04165001020 \" con 11 caracteres de longitud</div>";
 		  header('Location: registro.php?accion=error');
 		  exit;
-	} 
-	
+	}
+
 	/*?>if($_POST['password'] != $_POST['passwordConfirm']){
 		$error[] = 'Las contraseñas no concuerdan..';
 	}*/
-          
+
         // verificamos si el correo ya está en la base de datos
         $query = "
             SELECT 1
@@ -89,18 +89,18 @@ if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digi
             $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
         }
-        catch(PDOException $ex){ 
-		//die("Fallamos al hacer la busqueda: " . $ex->getMessage()); 
+        catch(PDOException $ex){
+		//die("Fallamos al hacer la busqueda: " . $ex->getMessage());
 		// si hay un error en la consulta nos muestra cual fue el error.
 		echo "<div class='panel-body'>
         		<div class='alert alert-danger alert-dismissable'>
-                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente:
 				</div>" .$ex->getMessage();
 				exit;
 		}
         $row = $stmt->fetch();
-        if($row){ 
-		//die("El correo ya esta en uso"); 
+        if($row){
+		//die("El correo ya esta en uso");
 		//si obtenemos las consultas y el correo es igual al que enviamos, nos nuestra el errror de que ya esta registrado.
 				echo "<div class='panel-body'>
                             <div class='alert alert-danger alert-dismissable'>
@@ -109,7 +109,7 @@ if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digi
 								header('Location: registro.php?accion=error');
 								exit;
 		}
-         
+
         /// Si todo pasa enviamos los datos a la base de datos mediante PDO para evitar Inyecciones SQL
         $query = "
             INSERT INTO usuarios (
@@ -136,7 +136,7 @@ if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digi
                 :logueado
             )
         ";
-          
+
         // Hacemos un salt para la seña y la encriptamos a numeros aleatorios en sha256 por seguridad.
         // Genero una sal aleatorea. En este caso uso mcrypt_create_iv y su
         // resultado lo traduzco a algo un poco mas "legible".
@@ -158,7 +158,7 @@ if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digi
             ':nivel' => $_POST['nivel'],
             ':logueado' => 'NO'
         );
-        try { 
+        try {
             $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
         }
@@ -166,7 +166,7 @@ if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digi
 		// Si tenemos problemas para ejecutar la consulta imprimimos el error
 			echo "<div class='panel-body'>
                      <div class='alert alert-warning alert-dismissable'>
-                          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente: 
+                          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>Tenemos problemas al ejecutar la consulta :c El error es el siguiente:
 								</div>" .$ex->getMessage();}
 			// Si todo pasa como deberia ser, referimos al usuario al panel de inicio de sesion con el mensaje de bienvenida.
 		header('Location: index.php?accion=registrado');
@@ -201,7 +201,7 @@ if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digi
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <title>Sistema.</title>
-<meta name="description" content="Sistema XXX version. 0.0.1">
+<meta name="description" content="Sistema SRCP version. 0.0.1">
 <meta name="viewport" content="width=device-width">
     <!-- Core CSS - Include with every page -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
@@ -305,7 +305,7 @@ if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digi
                         </div>
                     </div>
 
-</fieldset>  
+</fieldset>
 </form>
 
     </div>
@@ -315,11 +315,11 @@ if(strlen($_POST['telefono']) < 11){ //verificamos que el telefono tenga 11 digi
     <script src="assets/js/jquery.2.1.1.min.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
     <!-- Scripts extra -->
-    <script src="assets/js/validar.js"></script>  
+    <script src="assets/js/validar.js"></script>
     <script type="text/javascript">
     $(window).load(function(){
         $('#Alerta').modal('show');
     });
-</script> 
+</script>
 </body>
-</html> 
+</html>
