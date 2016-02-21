@@ -1,156 +1,145 @@
 <?php
-if (! defined ( 'SRCP' )) {
-	die ( "Logged Hacking attempt!" );
+
+if (!defined('SRCP')) {
+    die('Logged Hacking attempt!');
 }
-if (isset($_COOKIE["session"])){
-   if ($_COOKIE["session"]!=""){
-//
-$query = "SELECT nombre,
+if (isset($_COOKIE['session'])) {
+    if ($_COOKIE['session'] != '') {
+        $query = 'SELECT nombre,
                  apellido
           FROM   usuarios
           WHERE  cookie = :id
-        ";
+        ';
         $query_params = array(
-            ':id' => $_COOKIE['session']
+            ':id' => $_COOKIE['session'],
         );
 
-        try{ 
-         	    $stmt = $db->prepare($query);
-        $result = $stmt->execute($query_params);
-        }
-        catch(PDOException $ex){
-		echo "<div class='panel-body'>
+        try {
+            $stmt = $db->prepare($query);
+            $result = $stmt->execute($query_params);
+        } catch (PDOException $ex) {
+            echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                 Tenemos problemas al ejecutar la consulta :c El error es el siguiente:
 				</div>
-			</div>" .$ex->getMessage();
-		}
+			</div>".$ex->getMessage();
+        }
+    }
+} else {
+    header('Location: index.php?accion=log_error');
+}
 
-   }
-}else{
-	header('Location: index.php?accion=log_error');
-	}
-
-	//comienzo del registro de los profesores.
-    if(!empty($_POST))
-    {
-        /**
+    //comienzo del registro de los profesores.
+    if (!empty($_POST)) {
+        /*
          * Nos aseguramos de que escriban todos los campos. por servidor, por si alguien quiere meter datos escondidos.
          * Aqui tenemos las opciones en DIE, pero se piensa cambiar a un modal en versiones siguientes
          * La opcion Die, elimina todos los datos de la pagina y solo muestra ese mensaje.
          */
-		if(empty($_POST['cedula']))
-        {
-        	//die("Coloque la cedula.");
-        	echo "<div class='panel-body'>
+        if (empty($_POST['cedula'])) {
+            echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                 Error: Coloque su cedula.</div>
 			</div>";
-		}
-        if(empty($_POST['nombre']))
-        {
-        echo "<div class='panel-body'>
+        }
+        if (empty($_POST['nombre'])) {
+            echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                 Error: Coloque su nombre.</div>
 			</div>";
-        	}
-        if(empty($_POST['apellido']))
-        {
-        echo "<div class='panel-body'>
+        }
+        if (empty($_POST['apellido'])) {
+            echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                 Error: Coloque su apellido.</div>
 			</div>";
-		}
-        if(empty($_POST['direccion']))
-        {
-        echo "<div class='panel-body'>
+        }
+        if (empty($_POST['direccion'])) {
+            echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                 Error: Coloque su dirección.</div>
 			</div>";
-		}
-        if(empty($_POST['telefono']))
-        {
-        echo "<div class='panel-body'>
+        }
+        if (empty($_POST['telefono'])) {
+            echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                 Error: Coloque su teléfono.</div>
 			</div>";
-		}
-		if(empty($_POST['correo']))
-        {
-        echo "<div class='panel-body'>
+        }
+        if (empty($_POST['correo'])) {
+            echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                 Error: Coloque su correo.</div>
 			</div>";
-		}
-        if(!filter_var($_POST['correo'], FILTER_VALIDATE_EMAIL))
-        {
-        echo "<div class='panel-body'>
+        }
+        if (!filter_var($_POST['correo'], FILTER_VALIDATE_EMAIL)) {
+            echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                 Error: el correo no es valido.</div>
 			</div>";
-		}
-		// Chequeamos si la cedula existe
+        }
+        // Chequeamos si la cedula existe
 
         $query = '  SELECT 1
             		FROM profesores
             		WHERE cedula = :cedula
         		  ';
-        $query_params = array( ':cedula' => $_POST['cedula'] );
+        $query_params = array(':cedula' => $_POST['cedula']);
         try {
             $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
-        }
-        catch(PDOException $ex){
-        	/**
+        } catch (PDOException $ex) {
+            /*
         	 * Aqui de igual forma cambiaremos a un modal
         	 */
-        	die("Fallamos al hacer la busqueda: " . $ex->getMessage()); }
+            die('Fallamos al hacer la busqueda: '.$ex->getMessage());
+        }
         $row = $stmt->fetch();
-        if($row){
-        	echo "<div class='panel-body'>
+        if ($row) {
+            echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                 Error: La cédula ya existe.</div>
 			</div>";
-		}
-        $query = "SELECT 1
+        }
+        $query = 'SELECT 1
             	  FROM profesores
             	  WHERE correo = :correo
-        		 ";
+        		 ';
         $query_params = array(
-            ':correo' => $_POST['correo']
+            ':correo' => $_POST['correo'],
         );
         try {
             $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
+        } catch (PDOException $ex) {
+            die('Fallamos al revisar el email.: '.$ex->getMessage());
         }
-        catch(PDOException $ex){ die("Fallamos al revisar el email.: " . $ex->getMessage());}
         $row = $stmt->fetch();
-        if($row){
-        	//die("Este correo ya esta en uso");
-        	echo "<div class='panel-body'>
+        if ($row) {
+            echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                 <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                 Error: El correo ya esta en uso.</div>
 			</div>";
-		}
+        }
 /*
  * Antes de introducir calculamos la edad del profesor
  *
  */
-	$fecha = time() - strtotime($_POST['nacimiento']);
-	$edad = floor((($fecha / 3600) / 24) / 360);
+    $fecha = time() - strtotime($_POST['nacimiento']);
+        $edad = floor((($fecha / 3600) / 24) / 360);
 
         /// Si todo pasa enviamos los datos a la base de datos mediante PDO para evitar Inyecciones SQL
-        $query ="	INSERT INTO profesores (
+        $query = '	INSERT INTO profesores (
 				                nombre,
 				                apellido,
 								cedula,
@@ -189,11 +178,11 @@ $query = "SELECT nombre,
 				                :nacimiento,
 				                :f_contratado
 				            )
-        		";
-            $query_params = array(
+        		';
+        $query_params = array(
             ':nombre' => $_POST['nombre'],
-			':apellido' => $_POST['apellido'],
-			':cedula' => $_POST['cedula'],
+            ':apellido' => $_POST['apellido'],
+            ':cedula' => $_POST['cedula'],
             ':direccion' => $_POST['direccion'],
             ':telefono' => $_POST['telefono'],
             ':correo' => $_POST['correo'],
@@ -208,26 +197,26 @@ $query = "SELECT nombre,
             ':seguro' => $_POST['seguro'],
             ':edad' => $edad,
             ':nacimiento' => $_POST['nacimiento'],
-            ':f_contratado' => date('Y-m-d')
+            ':f_contratado' => date('Y-m-d'),
             );
         try {
             $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
-        }
-        catch(PDOException $ex){
-		// Si tenemos problemas para ejecutar la consulta imprimimos el error
-			echo "<div class='panel-body'>
+        } catch (PDOException $ex) {
+            // Si tenemos problemas para ejecutar la consulta imprimimos el error
+            echo "<div class='panel-body'>
                      <div class='alert alert-warning alert-dismissable'>
                         <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                         Tenemos problemas al ejecutar la consulta :c El error es el siguiente:
 					</div>
-				  </div>" .$ex->getMessage();}
-			// Si todo pasa como deberia ser, referimos al usuario al panel de
-			// inicio de sesion con el mensaje de bienvenida.
-		header('Location: listar_profesor.php');
-}
+				  </div>".$ex->getMessage();
+        }
+            // Si todo pasa como deberia ser, referimos al usuario al panel de
+            // inicio de sesion con el mensaje de bienvenida.
+        header('Location: listar_profesor.php');
+    }
 
-	if(isset($_GET['accion'])){
+    if (isset($_GET['accion'])) {
 
     //check the action
     switch ($_GET['accion']) {
@@ -241,29 +230,26 @@ $query = "SELECT nombre,
 				</div>";
             break;
     }
+    }
 
-}
-
-$query = "  SELECT nombre,
+$query = '  SELECT nombre,
                    apellido
             FROM   usuarios
             WHERE  ID = :id
-        ";
+        ';
         $query_params = array(
-            ':id' => $_COOKIE['id_usuario']
+            ':id' => $_COOKIE['id_usuario'],
         );
 
-        try{
+        try {
             $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
-        }
-        catch(PDOException $ex){
-		echo "<div class='panel-body'>
+        } catch (PDOException $ex) {
+            echo "<div class='panel-body'>
                 <div class='alert alert-warning alert-dismissable'>
                  <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
                  Tenemos problemas al ejecutar la consulta :c El error es el siguiente:
-				</div>" .$ex->getMessage();
-		echo "</div>";
-		}
+				</div>".$ex->getMessage();
+            echo '</div>';
+        }
         $row = $stmt->fetch();
-?>

@@ -2,13 +2,13 @@
 if (! defined ( 'SRCP' )) {
 	die ( "Logged Hacking attempt!" );
 }
-if (!empty($_POST['login'])){ 
-@include_once (CORE_DIR . '/security/check.login.php');
+if (!empty($_POST['login'])){
+include_once (CORE_DIR . '/security/check.login.php');
 }
-if (!empty($_POST['registro'])){ 
-@include_once (CORE_DIR . '/security/check.registro.php');
+if (!empty($_POST['registro'])){
+include_once (CORE_DIR . '/security/check.registro.php');
 }
-?> 
+?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -260,7 +260,7 @@ if (!empty($_POST['registro'])){
 													<label class="block">
 														<input type="checkbox" class="ace" required/>
 														<span class="lbl">
-															Acepto los 
+															Acepto los
 															<a href="#">Términos y condiciones</a>
 														</span>
 													</label>
@@ -356,32 +356,32 @@ if (!empty($_POST['registro'])){
 			    $(window).load(function(){
         		$('#Alerta').modal('show');
     			});
-			
-			
+
+
 			//you don't need this, just used for changing background
 			jQuery(function($) {
 			 $('#btn-login-dark').on('click', function(e) {
 				$('body').attr('class', 'login-layout');
 				$('#id-text2').attr('class', 'white');
 				$('#id-company-text').attr('class', 'blue');
-				
+
 				e.preventDefault();
 			 });
 			 $('#btn-login-light').on('click', function(e) {
 				$('body').attr('class', 'login-layout light-login');
 				$('#id-text2').attr('class', 'grey');
 				$('#id-company-text').attr('class', 'blue');
-				
+
 				e.preventDefault();
 			 });
 			 $('#btn-login-blur').on('click', function(e) {
 				$('body').attr('class', 'login-layout blur-login');
 				$('#id-text2').attr('class', 'white');
 				$('#id-company-text').attr('class', 'light-blue');
-				
+
 				e.preventDefault();
 			 });
-			 
+
 			});
 		</script>
 	</body>

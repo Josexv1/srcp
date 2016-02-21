@@ -8,14 +8,14 @@ $data = getDataBySession($_COOKIE["session"],$db);
 <html lang="en">
 	<head>
 	<title>Panel principal</title>
-	<?php 
-		@include_once (STATIC_DIR . '/header.php');
+	<?php
+		include_once (STATIC_DIR . '/header.php');
 		?>
 	</head>
 
 	<body class="no-skin">
-		<?php 
-		@include_once (STATIC_DIR . '/menu.php'); 
+		<?php
+		include_once (STATIC_DIR . '/menu.php');
 		?>
 	</head>
 			<div class="main-content">
@@ -69,14 +69,14 @@ $data = getDataBySession($_COOKIE["session"],$db);
 						</div><!-- /.data -->
 				</div> <!-- main container inner -->
 			</div><!-- /.main-content -->
-	<?php @include_once (STATIC_DIR . '/footer.php'); 		?>
+	<?php include_once (STATIC_DIR . '/footer.php'); 		?>
 
 		<!-- page specific plugin scripts -->
 
 		<!--[if lte IE 8]>
 		  <script src="assets/js/excanvas.min.js"></script>
 		<![endif]-->
-		<script src="assets/js/jquery-ui.custom.min.js"></script>		
+		<script src="assets/js/jquery-ui.custom.min.js"></script>
 		<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
 		<script src="assets/js/jquery.easypiechart.min.js"></script>
 		<script src="assets/js/jquery.sparkline.min.js"></script>

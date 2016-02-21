@@ -9,9 +9,9 @@
             }
         $data = getDataBySession($_COOKIE['session'], $db);
             if (!empty($_POST)) {
-                @include_once INC_DIR.'reg_prof.php';
+                include_once INC_DIR.'reg_prof.php';
             }
-        @include_once STATIC_DIR.'/header.php';
+        include_once STATIC_DIR.'/header.php';
         ?>
 		<!-- page specific plugin styles -->
 		<link rel="stylesheet" href="assets/css/bootstrap-multiselect.min.css" />
@@ -20,7 +20,7 @@
 </head>
 
 <body class="no-skin">
-	<?php @include_once STATIC_DIR.'/menu.php';
+	<?php include_once STATIC_DIR.'/menu.php';
         ?>
 	<div class="main-content">
 		<div class="main-content-inner">
@@ -221,7 +221,7 @@
 	</div>
 	<!-- /.main-content -->
 
-	<?php @include_once STATIC_DIR.'/footer.php';        ?>
+	<?php include_once STATIC_DIR.'/footer.php';        ?>
 
 	<!-- page specific plugin scripts -->
 	<script src="assets/js/typeahead.jquery.min.js"></script>
@@ -449,7 +449,7 @@
 		// Email Validation
 		function isValidEmailAddress(emailAddress) {
 			var pattern = new RegExp(
-				/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
+				/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
 			);
 			return pattern.test(emailAddress);
 		}
