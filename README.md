@@ -14,10 +14,7 @@ El sistema esta hecho en PHP MySQL. Utilizando PDO para realizar las conexiones 
 * Agregado mensaje de error cuando se intenta loguear y el usuario ya esta logueado.
 
 # Listo
-* Registro del docente
-* Lista de docentes
-* Perfil del docente (generico)
-* Reporte de lista de profesores (Ver listar_profesor.php)
+* Modificado. Pronto se acomodara.
 
 # TO-DO
 
