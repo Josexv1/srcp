@@ -9,7 +9,7 @@ if (! defined ( 'SRCP' )) {
             ':usuario' => $_COOKIE['id_usuario'],
             ':logueado' => $logueado
         );
-        try { 
+        try {
             $stmt = $db->prepare($query);
             $result = $stmt->execute($query_params);
         }
@@ -18,8 +18,6 @@ if (! defined ( 'SRCP' )) {
   $login_ok=false;
   $id_usuario=0;
   $numero_aleatorio=0;
-  setcookie( "id_usuario", "", 0 );
-  setcookie( "session", "", 0 ); 
-  header("Location: index.php"); 
+  setcookie( "session", "", 0 );
+  header("Location: index.php");
   die();
-?>
