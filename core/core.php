@@ -1,58 +1,71 @@
 <?PHP
-if (! defined ( 'SRCP' )) {
-	die ( "Logged Hacking attempt!" );
-}
-include_once (CORE_DIR . '/sys_config.php');
-require (CORE_DIR . '/config.php');
-include_once (CORE_DIR. '/security/check.loged.php');
-include_once (CORE_DIR. '/security/functions.php');
-switch ( $_GET['do'] ) {
-	case "panel" :
-	if ($login_ok) {
-include_once CORE_DIR . '/modulos/panel.php';
-		break;}
-		else{include_once CORE_DIR . '/modulos/login.php';}
-	case "salir" :
-		include_once CORE_DIR . '/security/logout.php';
-		break;
-	case "registroprofesor" :
-	if ($login_ok) {
-		include_once CORE_DIR . '/modulos/registroprofe.php';
-		break;}
-		else{include_once CORE_DIR . '/modulos/login.php';}
-	case "listaprofesor" :
-	if ($login_ok) {
-		include_once CORE_DIR . '/modulos/listpofe.php';
-		break;}
-		else{include_once CORE_DIR . '/modulos/login.php';}
-	case "editar_profesor" :
-	if ($login_ok) {
-		include_once CORE_DIR . '/modulos/panel.php';
-		break;}
-		else{include_once CORE_DIR . '/modulos/login.php';}
-	case "panel" :
-	if ($login_ok) {
-		include_once CORE_DIR . '/modulos/panel.php';
-		break;}
-		else{include_once CORE_DIR . '/modulos/login.php';}
-	case "login" :
-	if ($login_ok) {
-		include_once CORE_DIR . '/modulos/panel.php';
-		break;}else{
-			include_once CORE_DIR . '/modulos/login.php';
-			break;
-		}
-	default:
-	if ($login_ok) {
-		include_once CORE_DIR . '/modulos/panel.php';
-		break;}else{
-			include_once CORE_DIR . '/modulos/login.php';
-			break;
-		}
-	}
 
-if(isset($_GET['accion'])){
-switch ($_GET['accion']) {
+if (!defined('SRCP')) {
+    die('Logged Hacking attempt!');
+}
+include_once CORE_DIR.'/sys_config.php';
+require CORE_DIR.'/config.php';
+include_once CORE_DIR.'/security/check.loged.php';
+include_once CORE_DIR.'/security/functions.php';
+switch ($_GET['do']) {
+    case 'panel' :
+    if ($login_ok) {
+        include_once CORE_DIR.'/modulos/panel.php';
+        break;
+    } else {
+            include_once CORE_DIR.'/modulos/login.php';
+        }
+    case 'salir' :
+        include_once CORE_DIR.'/security/logout.php';
+        break;
+    case 'registroprofesor' :
+    if ($login_ok) {
+        include_once CORE_DIR.'/modulos/registroprofe.php';
+        break;
+    } else {
+            include_once CORE_DIR.'/modulos/login.php';
+        }
+    case 'listaprofesor' :
+    if ($login_ok) {
+        include_once CORE_DIR.'/modulos/listpofe.php';
+        break;
+    } else {
+            include_once CORE_DIR.'/modulos/login.php';
+        }
+    case 'editar_profesor' :
+    if ($login_ok) {
+        include_once CORE_DIR.'/modulos/panel.php';
+        break;
+    } else {
+            include_once CORE_DIR.'/modulos/login.php';
+        }
+    case 'panel' :
+    if ($login_ok) {
+        include_once CORE_DIR.'/modulos/panel.php';
+        break;
+    } else {
+            include_once CORE_DIR.'/modulos/login.php';
+        }
+    case 'login' :
+    if ($login_ok) {
+        include_once CORE_DIR.'/modulos/panel.php';
+        break;
+    } else {
+        include_once CORE_DIR.'/modulos/login.php';
+        break;
+    }
+    default:
+    if ($login_ok) {
+        include_once CORE_DIR.'/modulos/panel.php';
+        break;
+    } else {
+        include_once CORE_DIR.'/modulos/login.php';
+        break;
+    }
+    }
+
+if (isset($_GET['accion'])) {
+    switch ($_GET['accion']) {
     case 'registrado':
         echo "
     	<div class='modal fade' id='Alerta' tabindex='-1' role='dialog' aria-labeledby='AlertaLabel' aria-hidden='false'>
@@ -74,7 +87,7 @@ switch ($_GET['accion']) {
     	</div>";
     break;
     case 'pass_error':
-		echo "
+        echo "
 		<div class='modal fade' id='Alerta' tabindex='-1' role='dialog' aria-labeledby='AlertaLabel' aria-hidden='false'>
 		 <div class='modal-dialog'>
              <div class='modal-content'>
@@ -91,9 +104,9 @@ switch ($_GET['accion']) {
                 </div>
             </div>
         </div>";
-	break;
+    break;
     case 'log_error':
-		echo "<div class='modal fade' id='Alerta' tabindex='-1' role='dialog' aria-labeledby='AlertaLabel' aria-hidden='false'>
+        echo "<div class='modal fade' id='Alerta' tabindex='-1' role='dialog' aria-labeledby='AlertaLabel' aria-hidden='false'>
 		 <div class='modal-dialog'>
              <div class='modal-content'>
 				<div class='modal-header'>
@@ -109,8 +122,8 @@ switch ($_GET['accion']) {
                 </div>
             </div>
         </div>";
-	break;
-	case 'salir':
+    break;
+    case 'salir':
       echo "<div class='modal fade' id='Alerta' tabindex='-1' role='dialog' aria-labeledby='AlertaLabel' aria-hidden='false'>
    <div class='modal-dialog'>
              <div class='modal-content'>
@@ -165,8 +178,6 @@ switch ($_GET['accion']) {
         </div>
     </div>";
     break;
-	 	} //fin del switch
-  } //fin del isset accion
-
-
-?>
+        } //fin del switch
+} //fin del isset accion
+;

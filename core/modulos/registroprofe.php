@@ -202,6 +202,13 @@
 														</td>
 														<td align="left"><span id="msg_ncuenta"></span>&nbsp;</td>
 													</tr>
+													<tr>
+														<td align="right">Sueldo :</td>
+														<td align="left">
+															<input onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" type="text" id="sueldo" name="sueldo" value="" class="txtBox">
+														</td>
+														<td align="left"><span id="msg_sueldo"></span>&nbsp;</td>
+													</tr>
 												</table>
 											</div>
 										</div>
@@ -449,7 +456,7 @@
 		// Email Validation
 		function isValidEmailAddress(emailAddress) {
 			var pattern = new RegExp(
-				/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
+				/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/
 			);
 			return pattern.test(emailAddress);
 		}

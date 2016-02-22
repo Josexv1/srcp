@@ -1,23 +1,22 @@
 <?php
-if (! defined ( 'SRCP' )) {
-  die ( "Logged Hacking attempt!" );
+
+if (!defined('SRCP')) {
+    die('Logged Hacking attempt!');
 }
-  $numero_aleatorio = mt_rand(1000000,999999999);
+  $numero_aleatorio = mt_rand(1000000, 999999999);
   $logueado = 'NO';
-  $query = "UPDATE usuarios SET logueado = :logueado WHERE ID = :usuario";
+  $query = 'UPDATE usuarios SET logueado = :logueado WHERE cookie = :usuario';
         $query_params = array(
-            ':usuario' => $_COOKIE['id_usuario'],
-            ':logueado' => $logueado
+            ':usuario' => $_COOKIE['session'],
+            ':logueado' => $logueado,
         );
         try {
             $stmt = $db->prepare($query);
-            $result = $stmt->execute($query_params);
+            $stmt->execute($query_params);
+        } catch (PDOException $ex) {//TODO Agregar el error en un evento.
         }
-        catch(PDOException $ex){//error
-        }
-  $login_ok=false;
-  $id_usuario=0;
-  $numero_aleatorio=0;
-  setcookie( "session", "", 0 );
-  header("Location: index.php");
-  die();
+  $login_ok = false;
+  $id_usuario = 0;
+  $numero_aleatorio = 0;
+  setcookie('session', '', 0);
+  header('Location: index.php?accion=salir');
