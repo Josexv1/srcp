@@ -1,7 +1,7 @@
 <?php
     // Variables para conectar a la DB MySQL
     $username = 'root';
-    $password = '0000';
+    $password = '0000x';
     $host = 'localhost';
     $dbname = 'proyecto';
      // Opciones de la conexion PDO a MySQL con un Fetch mode en ASSOC!

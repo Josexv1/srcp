@@ -8,100 +8,100 @@ if (!defined('SRCP')) {
         /*
          * TODO Arreglar los Echo, por paneles bien hechos.
          */
-      //   if (empty($_POST['cedula'])) {
-      //       echo "<div class='panel-body'>
-      //           <div class='alert alert-warning alert-dismissable'>
-      //           <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-      //           Error: Coloque su cedula.</div>
-            // </div>";
-      //   }
-      //   if (empty($_POST['nombre'])) {
-      //       echo "<div class='panel-body'>
-      //           <div class='alert alert-warning alert-dismissable'>
-      //           <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-      //           Error: Coloque su nombre.</div>
-            // </div>";
-      //   }
-      //   if (empty($_POST['apellido'])) {
-      //       echo "<div class='panel-body'>
-      //           <div class='alert alert-warning alert-dismissable'>
-      //           <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-      //           Error: Coloque su apellido.</div>
-            // </div>";
-      //   }
-      //   if (empty($_POST['direccion'])) {
-      //       echo "<div class='panel-body'>
-      //           <div class='alert alert-warning alert-dismissable'>
-      //           <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-      //           Error: Coloque su dirección.</div>
-            // </div>";
-      //   }
-      //   if (empty($_POST['telefono'])) {
-      //       echo "<div class='panel-body'>
-      //           <div class='alert alert-warning alert-dismissable'>
-      //           <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-      //           Error: Coloque su teléfono.</div>
-            // </div>";
-      //   }
-      //   if (empty($_POST['correo'])) {
-      //       echo "<div class='panel-body'>
-      //           <div class='alert alert-warning alert-dismissable'>
-      //           <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-      //           Error: Coloque su correo.</div>
-            // </div>";
-      //   }
-      //   if (!filter_var($_POST['correo'], FILTER_VALIDATE_EMAIL)) {
-      //       echo "<div class='panel-body'>
-      //           <div class='alert alert-warning alert-dismissable'>
-      //           <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-      //           Error: el correo no es valido.</div>
-            // </div>";
-      //   }
-      //   // Chequeamos si la cedula existe
-      //
-      //   $query = '  SELECT 1
-      //       		FROM profesores
-      //       		WHERE cedula = :cedula
-      //   		  ';
-      //   $query_params = array(':cedula' => $_POST['cedula']);
-      //   try {
-      //       $stmt = $db->prepare($query);
-      //       $result = $stmt->execute($query_params);
-      //   } catch (PDOException $ex) {
-      //       /*
-      //   	 * Aqui de igual forma cambiaremos a un modal
-      //   	 */
-      //       die('Fallamos al hacer la busqueda: '.$ex->getMessage());
-      //   }
-      //   $row = $stmt->fetch();
-      //   if ($row) {
-      //       echo "<div class='panel-body'>
-      //           <div class='alert alert-warning alert-dismissable'>
-      //           <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-      //           Error: La cédula ya existe.</div>
-            // </div>";
-      //   }
-      //   $query = 'SELECT 1
-      //       	  FROM profesores
-      //       	  WHERE correo = :correo
-      //   		 ';
-      //   $query_params = array(
-      //       ':correo' => $_POST['correo'],
-      //   );
-      //   try {
-      //       $stmt = $db->prepare($query);
-      //       $result = $stmt->execute($query_params);
-      //   } catch (PDOException $ex) {
-      //       die('Fallamos al revisar el email.: '.$ex->getMessage());
-      //   }
-      //   $row = $stmt->fetch();
-      //   if ($row) {
-      //       echo "<div class='panel-body'>
-      //           <div class='alert alert-warning alert-dismissable'>
-      //           <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-      //           Error: El correo ya esta en uso.</div>
-            // </div>";
-      //  }
+        if (empty($_POST['cedula'])) {
+            echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: Coloque su cedula.</div>
+            </div>";
+        }
+        if (empty($_POST['nombre'])) {
+            echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: Coloque su nombre.</div>
+            </div>";
+        }
+        if (empty($_POST['apellido'])) {
+            echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: Coloque su apellido.</div>
+            </div>";
+        }
+        if (empty($_POST['direccion'])) {
+            echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: Coloque su dirección.</div>
+            </div>";
+        }
+        if (empty($_POST['telefono'])) {
+            echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: Coloque su teléfono.</div>
+            </div>";
+        }
+        if (empty($_POST['correo'])) {
+            echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: Coloque su correo.</div>
+            </div>";
+        }
+        if (!filter_var($_POST['correo'], FILTER_VALIDATE_EMAIL)) {
+            echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: el correo no es valido.</div>
+            </div>";
+        }
+        // Chequeamos si la cedula existe
+
+        $query = '  SELECT 1
+            		FROM profesores
+            		WHERE cedula = :cedula
+        		  ';
+        $query_params = array(':cedula' => $_POST['cedula']);
+        try {
+            $stmt = $db->prepare($query);
+            $result = $stmt->execute($query_params);
+        } catch (PDOException $ex) {
+            /*
+        	 * Aqui de igual forma cambiaremos a un modal
+        	 */
+            die('Fallamos al hacer la busqueda: '.$ex->getMessage());
+        }
+        $row = $stmt->fetch();
+        if ($row) {
+            echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: La cédula ya existe.</div>
+            </div>";
+        }
+        $query = 'SELECT 1
+            	  FROM profesores
+            	  WHERE correo = :correo
+        		 ';
+        $query_params = array(
+            ':correo' => $_POST['correo'],
+        );
+        try {
+            $stmt = $db->prepare($query);
+            $result = $stmt->execute($query_params);
+        } catch (PDOException $ex) {
+            die('Fallamos al revisar el email.: '.$ex->getMessage());
+        }
+        $row = $stmt->fetch();
+        if ($row) {
+            echo "<div class='panel-body'>
+                <div class='alert alert-warning alert-dismissable'>
+                <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                Error: El correo ya esta en uso.</div>
+            </div>";
+       }
 /*
  * Antes de introducir calculamos la edad del profesor
  *
