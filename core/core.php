@@ -25,9 +25,16 @@ switch ($_GET['do']) {
     } else {
             include_once CORE_DIR.'/modulos/login.php';
         }
+        case 'perfil' :
+        if ($login_ok) {
+            include_once CORE_DIR.'/modulos/perfil.php';
+            break;
+        } else {
+                include_once CORE_DIR.'/modulos/login.php';
+            }
     case 'listaprofesor' :
     if ($login_ok) {
-        include_once CORE_DIR.'/modulos/listpofe.php';
+        include_once CORE_DIR.'/modulos/listaprof.php';
         break;
     } else {
             include_once CORE_DIR.'/modulos/login.php';

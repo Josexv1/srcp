@@ -12,6 +12,9 @@
                 include_once INC_DIR.'reg_prof.php';
             }
         include_once STATIC_DIR.'/header.php';
+                if (!empty($_POST['registro'])) {
+                    include_once INC_DIR.'/reg_prof.php';
+                }
         ?>
 		<!-- page specific plugin styles -->
 		<link rel="stylesheet" href="assets/css/bootstrap-multiselect.min.css" />
@@ -52,7 +55,7 @@
 							<tr>
 								<td>
 									<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>" method="POST">
-										<input type='hidden' name="issubmit" value="1">
+										<input type='hidden' name="registro" value="1">
 										<!-- Tabs -->
 										<div id="wizard" class="swMain">
 											<ul>

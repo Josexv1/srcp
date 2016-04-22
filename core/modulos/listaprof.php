@@ -3,17 +3,17 @@
     <head>
         <title>Listar profesor - SRCP</title>
         <?php
-            if (! defined ( 'SRCP' )) {
-                die ( "Logged Hacking attempt!" );
-        }
-        $data = getDataBySession($_COOKIE["session"],$db);
-        include_once (INC_DIR . '/list_prof.php');
-        include_once (STATIC_DIR . '/header.php');
+            if (!defined('SRCP')) {
+                die('Logged Hacking attempt!');
+            }
+        $data = getDataBySession($_COOKIE['session'], $db);
+        include INC_DIR.'/list_prof.php';
+        include STATIC_DIR.'/header.php';
         ?>
     </head>
 
     <body class="no-skin">
-        <?php include_once (STATIC_DIR . '/menu.php');?>
+        <?php include STATIC_DIR.'/menu.php';?>
             <div class="main-content">
                 <div class="main-content-inner">
                     <div class="breadcrumbs" id="breadcrumbs">
@@ -22,7 +22,7 @@
                                 <i class="ace-icon fa fa-home home-icon"></i>
                                 <a href="index.php">Inicio</a>
                             </li>
-                            <li class="active">Registro de profesores</li>
+                            <li class="active">Lista de profesores</li>
                         </ul><!-- /.breadcrumb -->
 
                         <div class="nav-search" id="nav-search">
@@ -33,16 +33,7 @@
                                 </span>
                             </form>
                         </div><!-- /.nav-search -->
-                    </div>
-                        <div class="page-header">
-                            <h1>
-                                Principal
-                                <small>
-                                    <i class="ace-icon fa fa-angle-double-right"></i>
-                                    Registro de nuevos profesores.
-                                </small>
-                            </h1>
-                        </div><!-- /.page-header -->
+                        <!-- /.page-header -->
                         <!-- PAGE CONTENT BEGINS -->
                                 <div class="row">
                                     <div class="col-xs-12">
@@ -76,13 +67,18 @@
                                                 </thead>
 
                                                 <tbody>
-                                                <?php foreach ($rows as $row) {?>
+                                                <?php foreach ($rows as $row) {
+    ?>
                                                     <tr>
                                                         <td></td>
-                                                        <td><?php echo $row['cedula']; ?></td>
-                                                        <td><?php echo $row['nombre']; ?></td>
-                                                        <td><?php echo $row['apellido']; ?></td>
-                                                        <td><?php echo $row['condicion'];?></td>
+                                                        <td><?php echo $row['cedula'];
+    ?></td>
+                                                        <td><?php echo $row['nombre'];
+    ?></td>
+                                                        <td><?php echo $row['apellido'];
+    ?></td>
+                                                        <td><?php echo $row['condicion'];
+    ?></td>
                                                         <td><?php echo $row['telefono']?></td>
                                                         <td>
                                                             <div class="hidden-sm hidden-xs btn-group">
@@ -100,7 +96,8 @@
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                <?php } ?>
+                                                <?php
+} ?>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -109,7 +106,7 @@
             </div>
             </div>
             </div></div>
-  <?php include_once (STATIC_DIR . '/footer.php');?>
+  <?php include_once STATIC_DIR.'/footer.php';?>
         <!-- page specific plugin scripts -->
         <script src="assets/js/validar.js"></script>
         <!--<script src="assets/js/additional-methods.min.js"></script>-->
