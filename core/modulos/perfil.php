@@ -738,10 +738,7 @@ $data = getDataBySession($_COOKIE["session"],$db);
     	 * solo debemos tomarlas y meterlas en la nueva
     	 * tabla quejas con los datos del amonestado
     	 *
-    	 * TODO
-    	 * Seleccionar la cedula del ID ---- Listo!
-    	 * Agregar Cedula - Queja - Nivel a tabla quejas --Listo
-    	 * Actualizar la suma de las quejas al profesor. -- No implementado
+    	 * TODO  Seleccionar la cedula del ID Agregar Cedula - Queja - Nivel a tabla quejas  Actualizar la suma de las quejas al profesor. -- No implementado
     	 */
         /// hacemos un query para seleccionar la cedula
 
