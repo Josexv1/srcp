@@ -1,5 +1,8 @@
 # SRCP
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/d1179279-7d9a-4960-a8e3-4a033b7aa5e6/big.png)](https://insight.sensiolabs.com/projects/d1179279-7d9a-4960-a8e3-4a033b7aa5e6)
+[![Code Climate](https://codeclimate.com/github/Josexv1/srcp/badges/gpa.svg)](https://codeclimate.com/github/Josexv1/srcp)
+[![Test Coverage](https://codeclimate.com/github/Josexv1/srcp/badges/coverage.svg)](https://codeclimate.com/github/Josexv1/srcp/coverage)
+[![Issue Count](https://codeclimate.com/github/Josexv1/srcp/badges/issue_count.svg)](https://codeclimate.com/github/Josexv1/srcp)
 
 Sistema de control de profesores. (Active Development.)
 
